@@ -1,16 +1,16 @@
 import { create } from 'zustand'
 
 type State = {
-    taskId: number | null,
+    taskId: string | null,
 }
 
 type Actions = {
-    setTaskId: (id: number) => void,
+    setTaskId: (id: string) => void,
     resetState: () => void
 }
 
 export const useOpenTaskUpdate = create<State & Actions>((set) => ({
     taskId: null,
-    setTaskId: (newState: number) => set(() => ({ taskId: newState })),
+    setTaskId: (newState: string) => set(() => ({ taskId: newState })),
     resetState: () => set(() => ({ taskId: null })),
 }))
