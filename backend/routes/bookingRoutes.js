@@ -19,6 +19,9 @@ router.post('/razorpay-webhook', handleWebhook);
 // 3. User Booking History
 router.get('/my-tickets', protect, getMyBookings);
 
+// 4. Get QR Code URL for a specific booking
+router.get('/qr/:bookingId', protect, getQrCode); 
+
 export default router;
 
 // Note on /verification/bookId/:qrCodeKey:
