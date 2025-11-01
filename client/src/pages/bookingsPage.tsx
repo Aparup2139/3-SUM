@@ -5,7 +5,7 @@ import { RightContent } from "@/components/pagesUi/tasksPageUI/rightContent"
 export const BookingsPage = () => {    
 
     return (<PageWrapper
-        headerText=""
+        headerText="Booked Tickets"
         leftContent={<LeftContent />}
         rightContent={<RightContent />}
     />)

@@ -2,8 +2,8 @@ import { useState } from "react"
 import { Separator } from "@/components/ui/separator"
 import { motion } from "framer-motion"
 import { BrushCleaning } from "lucide-react"
-import { useUserStore } from "@/store/user.store"
 import EventCard from "../tasksPageUI/eventCard"
+import BookedTicketCard from "./bookingsCard"
 
 
 export const cityArray = [
@@ -238,9 +238,9 @@ export const LeftContent = () => {
     const renderEvents = (events: typeof sampleEvents, label: string) => {
 
         if (isLoading) return Array.from({ length: 3 }).map((_, i) => <EventCard key={i} loading />)
-
+        
         if (events.length === 0) return renderEmptyState(label)
-        return events.map((event) => <EventCard key={event.id} {...event} />)
+        return events.map((event) => <BookedTicketCard pastEvent={event.end_date < now} key={event.id} {...event} />)
     }
 
     return (

@@ -2,10 +2,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Calendar, MapPin, Users, Clock } from 'lucide-react';
+import { Calendar, MapPin, Users, Clock, DownloadIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface EventCardProps {
+  pastEvent: boolean,
   id?: string;
   title?: string;
   short_description?: string;
@@ -24,19 +25,18 @@ interface EventCardProps {
   loading?: boolean;
 }
 
-export default function EventCard({
+export default function BookedTicketCard({
+  pastEvent,
   id,
   title = "Tech Innovators Summit 2025",
   short_description = "A premier event showcasing future technology trends.",
   start_date = new Date("2025-02-15T09:00:00Z"),
   end_date = new Date("2025-02-17T17:00:00Z"),
   location = "Bangalore International Exhibition Centre, India",
-  category = ["Technology", "Conference"],
   totalTickets = 500,
   ticketsSold = 320,
   currentPrice = 2200,
-  priceMin = 1500,
-  priceMax = 3500,
+  
   loading = false,
 }: EventCardProps) {
   const formatDate = (date: Date) => {
@@ -52,6 +52,9 @@ export default function EventCard({
   const ticketsAvailable = totalTickets - ticketsSold;
   const soldPercentage = ((ticketsSold / totalTickets) * 100).toFixed(1);
   const availabilityStatus = ticketsAvailable > 100 ? "Available" : ticketsAvailable > 0 ? "Limited" : "Sold Out";
+  
+
+  
 
   if (loading) {
     return (
@@ -86,11 +89,9 @@ export default function EventCard({
         />
 
         <div className="absolute top-3 right-3 flex gap-2">
-          {category.map((cat) => (
-            <Badge key={cat} className="bg-fuchsia-600 text-white border-0">
-              {cat}
-            </Badge>
-          ))}
+          <Badge className="bg-fuchsia-600 text-white border-0">
+            {pastEvent ? "Past Event" : "Ongoing/Upcoming Event"}
+          </Badge>
         </div>
       </div>
 
@@ -125,7 +126,7 @@ export default function EventCard({
 
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
-            <p className="text-xs text-slate-500 mb-1">Current Price</p>
+            <p className="text-xs text-slate-500 mb-1">Bought at</p>
             <p className="text-lg font-bold text-white">₹{currentPrice.toLocaleString()}</p>
           </div>
           <div className="flex gap-2">
@@ -133,10 +134,10 @@ export default function EventCard({
               Learn More
             </Button>
             <Button
-              disabled={ticketsAvailable === 0}
-              className="bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white border-0 disabled:opacity-50"
+
+              className="bg-gradient-to-r  from-purple-600 to-fuchsia-600 text-white border-0 disabled:opacity-50"
             >
-              {ticketsAvailable === 0 ? 'Sold Out' : 'Book Tickets'}
+            <DownloadIcon /> Download Ticket              
             </Button>
           </div>
         </div>

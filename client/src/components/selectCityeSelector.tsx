@@ -2,10 +2,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
-import { MapPin } from "lucide-react"
 import { cityMeta } from "./pagesUi/eventCityPage/leftContent"
 import { useNavigate } from "react-router-dom"
-
+import { useState } from "react"
 
 const otherCities = [
   "Aalo", "Acharapakkam", "Adilabad", "Agra", "Ajmer", "Akola", "Alappuzha",
@@ -14,6 +13,20 @@ const otherCities = [
 
 export function CitySelectorDialog({ setOpen, open, onClose }: { setOpen: any, open: boolean; onClose: () => void }) {
   const navigate = useNavigate()
+  const [searchValue, setSearchValue] = useState("")
+
+  const handleCitySelect = (city: string) => {
+    if (!city.trim()) return
+    setOpen(false)
+    navigate("/home/" + city.trim())
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault()
+      handleCitySelect(searchValue)
+    }
+  }
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -23,20 +36,24 @@ export function CitySelectorDialog({ setOpen, open, onClose }: { setOpen: any, o
         </DialogHeader>
 
         <div className="mt-4 space-y-4">
-          <Input placeholder="Search for your city" className="w-full" />
+          {/* Search Input */}
+          <Input
+            placeholder="Search for your city"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="w-full"
+          />
 
+          {/* Popular Cities */}
           <div>
             <h3 className="text-base font-medium mb-3">Popular Cities</h3>
             <div className="grid grid-cols-5 gap-4">
               {cityMeta.map((city) => {
-                const Icon = city.icon;
+                const Icon = city.icon
                 return (
                   <div
-                    onClick={() => {
-                      setOpen(false)
-                      navigate("/home/" + city.city);
-
-                    }}
+                    onClick={() => handleCitySelect(city.city)}
                     key={city.city}
                     className="flex flex-col items-center gap-2 cursor-pointer hover:text-primary transition"
                   >
@@ -48,6 +65,7 @@ export function CitySelectorDialog({ setOpen, open, onClose }: { setOpen: any, o
             </div>
           </div>
 
+          {/* Other Cities */}
           <div>
             <h3 className="text-base font-medium mb-3 mt-6">Other Cities</h3>
             <ScrollArea className="h-40 rounded-md border p-3">
@@ -55,6 +73,7 @@ export function CitySelectorDialog({ setOpen, open, onClose }: { setOpen: any, o
                 {otherCities.map((city) => (
                   <div
                     key={city}
+                    onClick={() => handleCitySelect(city)}
                     className="cursor-pointer hover:text-primary transition"
                   >
                     {city}
@@ -73,6 +92,5 @@ export function CitySelectorDialog({ setOpen, open, onClose }: { setOpen: any, o
       </DialogContent>
     </Dialog>
   )
-
-
 }
+  
