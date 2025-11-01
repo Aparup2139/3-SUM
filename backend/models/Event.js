@@ -5,6 +5,10 @@ const EventSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    image: {
+        type: String,
+        default: 'default-event.png' // Default image path/URL
+    },
     description: {
         type: String,
         required: true
@@ -60,7 +64,7 @@ const EventSchema = new mongoose.Schema({
     // CRUCIAL: Only show published events publicly
     isPublished: { 
         type: Boolean,
-        default: false,
+        default: true,
         index: true
     },
     

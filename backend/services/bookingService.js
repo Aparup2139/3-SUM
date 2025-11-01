@@ -43,13 +43,16 @@ export const initiatePaymentOrder = async (userId, eventId, ticketCount, totalAm
         payment_capture: 1 // Auto-capture payment
     };
 
+    console.log("Creating Razorpay order with options:", options);
     const order = await razorpayInstance.orders.create(options);
+
+    console.log("Razorpay order created:", order);
     
     // Store preliminary booking record
     const preliminaryBooking = await Booking.create({
         user: userId,
         event: eventId,
-        ticketCount: ticketCount,
+        tickets: ticketCount, 
         totalAmount: totalAmount,
         paymentId: order.id, // Store Razorpay Order ID
         razorpayStatus: 'pending',
@@ -90,7 +93,7 @@ export const handlePaymentSuccess = async (razorpay_order_id, razorpay_payment_i
     await booking.save();
     
     // Increment tickets sold count on the event
-    await Event.findByIdAndUpdate(booking.event, { $inc: { ticketsSold: booking.ticketCount } });
+    await Event.findByIdAndUpdate(booking.event, { $inc: { ticketsSold: booking.tickets.length } });
 
     // In a real app, here you would also trigger an email/notification service 
     // to send the QR code ticket URL to the user.
