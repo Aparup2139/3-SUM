@@ -3,6 +3,7 @@ import asyncHandler from 'express-async-handler';
 import Booking from '../models/Booking.js';
 import { generateQrCodeUrl } from '../services/qrService.js'; // New import
 
+<<<<<<< HEAD
 // ... (previous controller exports: createOrder, handleWebhook, verifyTicket, getMyBookings)
 
 // @desc    Get the QR Code URL for a specific booking
@@ -32,6 +33,29 @@ export const getQrCode = asyncHandler(async (req, res) => {
 
     // Use the service to generate the external image URL
     const qrCodeImageURL = generateQrCodeUrl(booking.qrCodeKey);
+=======
+// @desc    Initiate Razorpay order creation
+// @route   POST /api/v1/bookings/create-order
+// @access  Protected
+export const createOrder = asyncHandler(async (req, res) => {
+    // req.user is populated by 'protect' middleware
+    const user= req.user._id||req.user.id; 
+    const { event, ticketCount, totalAmount} = req.body;
+
+    // Note: Validation (max 5 tickets) is handled by middleware, but a final check here is good practice.
+    if (!event || !ticketCount || !totalAmount) {
+        res.status(400);
+        throw new Error('Missing required booking details (eventId, ticketCount, totalAmount).');
+    }
+
+    // Service handles communication with Razorpay and preliminary booking storage
+    const result = await bookingService.initiatePaymentOrder(
+        user, 
+        event, 
+        ticketCount, 
+        totalAmount
+    );
+>>>>>>> 8d62ba24a2072fe9392eb8ba22b7838187eaa290
 
     res.status(200).json({
         message: 'QR Code URL generated successfully.',
