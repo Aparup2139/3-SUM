@@ -5,7 +5,7 @@ export type httpRequstType = {
 
 export enum UserRole {
     NORMAL = "NORMAL",
-    GENERAL = "GENERAL",
+    USER = "USER",
     ADMIN = "ADMIN"
 }
 
