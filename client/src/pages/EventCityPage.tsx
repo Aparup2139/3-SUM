@@ -10,7 +10,7 @@ import { RightContent } from "@/components/pagesUi/tasksPageUI/rightContent"
 export const EventCityPage = () => {
     const { cityName } = useParams();
     const [open, setOpen] = useState(cityName ? false : true)
-
+    
 
     return (<PageWrapper
         headerText=""

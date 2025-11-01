@@ -100,7 +100,7 @@ export const RootPageLayout: React.FC = () => {
             </li>
 
         </nav>
-        <section className="flex justify-center items-center">
+        <section className="flex justify-center w-screen items-center">
             <Outlet />
             <Toaster closeButton richColors position="top-center" />
         </section>

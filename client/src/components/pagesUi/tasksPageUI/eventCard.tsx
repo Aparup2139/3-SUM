@@ -3,6 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Calendar, MapPin, Users, Clock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface EventCardProps {
   id?: string;
@@ -24,6 +25,7 @@ interface EventCardProps {
 }
 
 export default function EventCard({
+  id,
   title = "Tech Innovators Summit 2025",
   short_description = "A premier event showcasing future technology trends.",
   start_date = new Date("2025-02-15T09:00:00Z"),
@@ -46,7 +48,7 @@ export default function EventCard({
   };
 
   console.log("title:", title)
-
+  const navigate = useNavigate();
   const ticketsAvailable = totalTickets - ticketsSold;
   const soldPercentage = ((ticketsSold / totalTickets) * 100).toFixed(1);
   const availabilityStatus = ticketsAvailable > 100 ? "Available" : ticketsAvailable > 0 ? "Limited" : "Sold Out";
@@ -73,7 +75,9 @@ export default function EventCard({
 
 
   return (
-    <Card className="overflow-x border-slate-800 bg-slate-900/60 backdrop-blur w-full max-w-3xl shadow-md hover:shadow-lg transition-all duration-300">
+    <Card
+      onClick={() => navigate("/home/event/" + id)}
+      className="overflow-x border-slate-800 bg-slate-900/60 backdrop-blur w-full max-w-3xl shadow-md hover:shadow-lg transition-all duration-300">
       <div className="relative h-48 overflow-hidden">
         <img
           src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&h=400&fit=crop"

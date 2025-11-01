@@ -1,14 +1,16 @@
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom"
+import { Sidebar } from "@/components/sidebar/sidebar";
 
-import { Toaster } from "@/components/ui/sonner";
-import { AppSidebar } from "@/components/sidebar/sidebar";
+import { Toaster } from "@/components/ui/sonner"
+import { useScreenSizeStore } from "@/store/screenSizestate.store";
 
 export const RootLayout: React.FC = () => {
-  return (
-    <main className="flex h-dvh w-screen bg-background text-foreground">
-      <AppSidebar />
-      <Outlet />
-      <Toaster closeButton richColors position="top-center" />
-    </main>
-  );
-};
+    const mobileView = useScreenSizeStore((state) => state.mobileView);
+    return (
+        <main className={`flex ${mobileView && "flex-col-reverse"} h-dvh w-screen bg-background text-foreground `}>
+            <Sidebar />
+            <Outlet />
+            <Toaster closeButton richColors position="top-center" />
+        </main>
+    )
+}

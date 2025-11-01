@@ -2,7 +2,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { RootLayout } from './pages/rootlayout'
 import { HomePage } from './pages/taskPage'
 import { NotificationPage } from './pages/notificationPage'
-import { MessagesPage } from './pages/messagePage'
+import { BookingsPage } from './pages/bookingsPage'
 import { AuthPage } from './components/pagesUi/authPage/authPage'
 import { RootPageLayout } from './components/landingpage/rootPageLayout'
 import { LandingPage } from './components/landingpage/landingpage'
@@ -62,8 +62,8 @@ const router = createBrowserRouter([
         element: <ProfilePage />
       },
       {
-        path: "/orders",
-        element: <MessagesPage />
+        path: "/bookings",
+        element: <BookingsPage />
       },
       {
         path: "/help",

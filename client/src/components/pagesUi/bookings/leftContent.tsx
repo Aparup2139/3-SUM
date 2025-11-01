@@ -3,7 +3,8 @@ import { Separator } from "@/components/ui/separator"
 import { motion } from "framer-motion"
 import { BrushCleaning } from "lucide-react"
 import { useUserStore } from "@/store/user.store"
-import EventCard from "./eventCard"
+import EventCard from "../tasksPageUI/eventCard"
+
 
 export const cityArray = [
     "Bangalore",
@@ -215,8 +216,7 @@ const sampleEvents = [
 
 
 export const LeftContent = () => {
-    const role = useUserStore((state) => state.user.role)
-    const id = useUserStore((state) => state.user.id)
+
     const [activeTab, setActiveTab] = useState<number>(1)
     const isLoading = false
 
@@ -244,12 +244,11 @@ export const LeftContent = () => {
     }
 
     return (
-        <div className="h-full w-full flex flex-col justify-center items-center bg-white">
+        <div className="h-full w-full flex flex-col justify-center items-center">
             <div className="w-full">
                 <div className="flex relative h-12 sm:h-10 w-full items-center text-xs sm:text-sm">
-                    <Tab text="Upcoming Events" isActive={activeTab === 1} onClick={() => setActiveTab(1)} />
-                    <Tab text="Ongoing Events" isActive={activeTab === 2} onClick={() => setActiveTab(2)} />
-                    <Tab text="Past Events" isActive={activeTab === 3} onClick={() => setActiveTab(3)} />
+                    <Tab text="Ongoing/Upcoming Booked Events" isActive={activeTab === 1} onClick={() => setActiveTab(1)} />
+                    <Tab text="Past Booked Events" isActive={activeTab === 2} onClick={() => setActiveTab(2)} />
                 </div>
                 <Separator orientation="horizontal" className="w-full" />
             </div>
