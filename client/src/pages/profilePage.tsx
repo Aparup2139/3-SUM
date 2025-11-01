@@ -13,26 +13,23 @@ import {
 } from "lucide-react";
 import ProfilePalette from "@/components/ui/profilePallete";
 import { ProfileImageData } from "@/constast";
+import { useAuth } from "@/contexts/authContext";
 
 export default function ProfilePage() {
   const [profilePic, setProfilePic] = useState<string>("");
   const [isEditingProfilePic, setIsEditingProfilePic] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const { user } = useAuth();
   const [profile, setProfile] = useState({
-    name: "John Doe",
-    email: "john.doe@example.com",
+    name: user?.fullName || "John Doe",
+    email: user?.email || "john.doe@example.com",
+    profileImgUrl: user?.profileImgUrl || "",
     instagram: "@johndoe",
     twitter: "@johndoe",
     youtube: "@johndoechannel",
     linkedin: "johndoe",
   });
-  useEffect(() => {
-    ProfileImageData.forEach((item) => {
-      if (item.id === 1) {
-        setProfilePic(item.url);
-      }
-    });
-  }, []);
+
   const handleEdit = () => {
     setIsEditing(!isEditing);
   };
