@@ -1,0 +1,28 @@
+.bg {
+    position: relative;
+    overflow-x: hidden;
+}
+
+.bg::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0.1;
+    /* this is how you do it */
+    z-index: -1;
+    pointer-events: none;
+}
+
+.glow-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(60px);
+    pointer-events: none;
+    z-index: -1;
+}
