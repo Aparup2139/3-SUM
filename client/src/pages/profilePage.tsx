@@ -9,6 +9,7 @@ import {
   Twitter,
   Youtube,
   Linkedin,
+  Save,
 } from "lucide-react";
 
 export default function ProfilePage() {
@@ -35,87 +36,92 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="flex w-full h-full overflow-auto bg-slate-900">
-      <div className="flex-1 bg-slate-900">
-        <div className="border-b border-gray-800 px-8 py-6">
-          <h1 className="text-2xl font-semibold text-white mb-1">
-            Account settings and preferences
+    <div className="flex bg-background w-full h-full overflow-auto">
+      <div className="flex-1 bg-background">
+        <div className="border-b px-6 py-4 max-md:hidden">
+          <h1 className="text-xl font-semibold text-foreground mb-1">
+            Profile
           </h1>
         </div>
-        <div className="px-8 py-8">
-          <div className="flex flex-col items-center mb-12 pb-8 border-b border-gray-800">
-            <div className="relative mb-6">
-              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 via-purple-500 to-purple-600 flex items-center justify-center">
-                <User size={56} className="text-white" strokeWidth={1.5} />
+
+        <div className="px-6 py-6">
+          <div className="flex flex-col lg:flex-row gap-6 mb-6 pb-6 border-b">
+            <div className="flex flex-col items-center justify-center lg:min-w-[240px]">
+              <div className="relative mb-4">
+                <div className="w-28 h-28 rounded-full bg-gradient-to-br from-blue-500 via-purple-500 to-purple-600 flex items-center justify-center">
+                  <User
+                    size={48}
+                    className="text-foreground"
+                    strokeWidth={1.5}
+                  />
+                </div>
+                <button className="absolute bottom-1 right-1 p-2 bg-background rounded-full shadow-lg hover:bg-background/80 cursor-pointer border border-foreground/10">
+                  <Edit2 size={12} className="text-foreground" />
+                </button>
               </div>
-              <button className="absolute bottom-1 right-1 bg-orange-500 hover:bg-orange-600 rounded-full p-2.5 shadow-lg transition-colors">
-                <Edit2 size={14} className="text-white" />
-              </button>
+              <h2 className="text-xl font-semibold text-foreground mb-1.5">
+                {profile.name}
+              </h2>
+              <p className="text-muted-foreground flex items-center gap-2 text-xs">
+                <Mail size={14} />
+                {profile.email}
+              </p>
             </div>
-            <h2 className="text-2xl font-semibold text-white mb-2">
-              {profile.name}
-            </h2>
-            <p className="text-gray-400 flex items-center gap-2 text-sm">
-              <Mail size={16} />
-              {profile.email}
-            </p>
+
+            <div className="flex-1">
+              <div className="bg-background/80 rounded-lg p-5 border border-foreground/10">
+                <div className="w-full flex justify-between items-start mb-3">
+                  <h3 className="text-base font-semibold text-foreground">
+                    Personal Information
+                  </h3>
+                  <button
+                    onClick={isEditing ? handleSave : handleEdit}
+                    className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-1.5 rounded-md transition-colors font-medium cursor-pointer text-sm"
+                  >
+                    {isEditing ? <Save size={16} /> : <Edit2 size={16} />}
+                    {isEditing ? "Save" : "Edit"}
+                  </button>
+                </div>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs text-foreground/80 mb-1.5">
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      value={profile.name}
+                      onChange={(e) => handleChange("name", e.target.value)}
+                      disabled={!isEditing}
+                      className="w-full bg-background rounded-md px-3 py-2 text-sm text-foreground disabled:opacity-50 disabled:cursor-not-allowed border border-foreground/10 focus:border-primary focus:outline-none transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs text-foreground/80 mb-1.5">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      value={profile.email}
+                      onChange={(e) => handleChange("email", e.target.value)}
+                      disabled={!isEditing}
+                      className="w-full bg-background rounded-md px-3 py-2 text-sm text-foreground disabled:opacity-50 disabled:cursor-not-allowed border border-foreground/10 focus:border-primary focus:outline-none transition-colors"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="max-w-3xl mx-auto">
-            {/* Edit Profile Button */}
-            <div className="flex justify-end mb-6">
-              <button
-                onClick={isEditing ? handleSave : handleEdit}
-                className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-5 py-2.5 rounded-lg transition-colors font-medium"
-              >
-                <Edit2 size={18} />
-                {isEditing ? "Save Profile" : "Edit Profile"}
-              </button>
-            </div>
-
-            {/* Personal Information */}
-            <div className="bg-gray-800 bg-opacity-40 rounded-lg p-6 mb-6 border border-gray-800">
-              <h3 className="text-lg font-semibold text-white mb-4">
-                Personal Information
-              </h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm text-gray-400 mb-2">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    value={profile.name}
-                    onChange={(e) => handleChange("name", e.target.value)}
-                    disabled={!isEditing}
-                    className="w-full bg-gray-900 rounded-lg px-4 py-2.5 text-white disabled:opacity-50 disabled:cursor-not-allowed border border-gray-700 focus:border-orange-500 focus:outline-none transition-colors"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm text-gray-400 mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    value={profile.email}
-                    onChange={(e) => handleChange("email", e.target.value)}
-                    disabled={!isEditing}
-                    className="w-full bg-gray-900 rounded-lg px-4 py-2.5 text-white disabled:opacity-50 disabled:cursor-not-allowed border border-gray-700 focus:border-orange-500 focus:outline-none transition-colors"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Social Media Handles */}
-            <div className="bg-gray-800 bg-opacity-40 rounded-lg p-6 mb-6 border border-gray-800">
-              <h3 className="text-lg font-semibold text-white mb-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-background/80 rounded-lg p-5 mb-5 border border-foreground/10">
+              <h3 className="text-base font-semibold text-foreground mb-3">
                 Social Media
               </h3>
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="bg-gradient-to-br from-pink-500 to-orange-500 rounded-lg p-2 flex-shrink-0">
-                    <Instagram size={20} />
+              <div className="space-y-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="bg-gradient-to-br from-pink-500 to-orange-500 rounded-md p-1.5 flex-shrink-0">
+                    <Instagram size={18} className="text-white" />
                   </div>
                   <input
                     type="text"
@@ -123,13 +129,13 @@ export default function ProfilePage() {
                     onChange={(e) => handleChange("instagram", e.target.value)}
                     disabled={!isEditing}
                     placeholder="Instagram handle"
-                    className="flex-1 bg-gray-900 rounded-lg px-4 py-2.5 text-white disabled:opacity-50 disabled:cursor-not-allowed border border-gray-700 focus:border-orange-500 focus:outline-none transition-colors"
+                    className="flex-1 bg-background rounded-md px-3 py-2 text-sm text-foreground disabled:opacity-50 disabled:cursor-not-allowed border border-foreground/10 focus:border-primary focus:outline-none transition-colors placeholder:text-muted-foreground"
                   />
                 </div>
 
-                <div className="flex items-center gap-3">
-                  <div className="bg-blue-500 rounded-lg p-2 flex-shrink-0">
-                    <Twitter size={20} />
+                <div className="flex items-center gap-2.5">
+                  <div className="bg-blue-500 rounded-md p-1.5 flex-shrink-0">
+                    <Twitter size={18} className="text-white" />
                   </div>
                   <input
                     type="text"
@@ -137,13 +143,13 @@ export default function ProfilePage() {
                     onChange={(e) => handleChange("twitter", e.target.value)}
                     disabled={!isEditing}
                     placeholder="Twitter handle"
-                    className="flex-1 bg-gray-900 rounded-lg px-4 py-2.5 text-white disabled:opacity-50 disabled:cursor-not-allowed border border-gray-700 focus:border-orange-500 focus:outline-none transition-colors"
+                    className="flex-1 bg-background rounded-md px-3 py-2 text-sm text-foreground disabled:opacity-50 disabled:cursor-not-allowed border border-foreground/10 focus:border-primary focus:outline-none transition-colors placeholder:text-muted-foreground"
                   />
                 </div>
 
-                <div className="flex items-center gap-3">
-                  <div className="bg-red-600 rounded-lg p-2 flex-shrink-0">
-                    <Youtube size={20} />
+                <div className="flex items-center gap-2.5">
+                  <div className="bg-red-600 rounded-md p-1.5 flex-shrink-0">
+                    <Youtube size={18} className="text-white" />
                   </div>
                   <input
                     type="text"
@@ -151,13 +157,13 @@ export default function ProfilePage() {
                     onChange={(e) => handleChange("youtube", e.target.value)}
                     disabled={!isEditing}
                     placeholder="YouTube channel"
-                    className="flex-1 bg-gray-900 rounded-lg px-4 py-2.5 text-white disabled:opacity-50 disabled:cursor-not-allowed border border-gray-700 focus:border-orange-500 focus:outline-none transition-colors"
+                    className="flex-1 bg-background rounded-md px-3 py-2 text-sm text-foreground disabled:opacity-50 disabled:cursor-not-allowed border border-foreground/10 focus:border-primary focus:outline-none transition-colors placeholder:text-muted-foreground"
                   />
                 </div>
 
-                <div className="flex items-center gap-3">
-                  <div className="bg-blue-700 rounded-lg p-2 flex-shrink-0">
-                    <Linkedin size={20} />
+                <div className="flex items-center gap-2.5">
+                  <div className="bg-blue-700 rounded-md p-1.5 flex-shrink-0">
+                    <Linkedin size={18} className="text-white" />
                   </div>
                   <input
                     type="text"
@@ -165,20 +171,19 @@ export default function ProfilePage() {
                     onChange={(e) => handleChange("linkedin", e.target.value)}
                     disabled={!isEditing}
                     placeholder="LinkedIn profile"
-                    className="flex-1 bg-gray-900 rounded-lg px-4 py-2.5 text-white disabled:opacity-50 disabled:cursor-not-allowed border border-gray-700 focus:border-orange-500 focus:outline-none transition-colors"
+                    className="flex-1 bg-background rounded-md px-3 py-2 text-sm text-foreground disabled:opacity-50 disabled:cursor-not-allowed border border-foreground/10 focus:border-primary focus:outline-none transition-colors placeholder:text-muted-foreground"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-4">
-              <button className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 text-white px-6 py-3 rounded-lg transition-colors border border-gray-700">
-                <LogOut size={20} />
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button className="flex-1 flex items-center justify-center gap-2 bg-secondary hover:bg-secondary/80 text-secondary-foreground px-5 py-2.5 rounded-md transition-colors cursor-pointer text-sm">
+                <LogOut size={18} />
                 Logout
               </button>
-              <button className="flex-1 flex items-center justify-center gap-2 bg-red-600 bg-opacity-20 hover:bg-opacity-30 text-red-400 px-6 py-3 rounded-lg transition-colors border border-red-600 border-opacity-30">
-                <Trash2 size={20} />
+              <button className="flex-1 flex items-center justify-center gap-2 bg-destructive hover:bg-destructive/90 text-destructive-foreground px-5 py-2.5 rounded-md transition-colors cursor-pointer text-sm">
+                <Trash2 size={18} />
                 Delete Account
               </button>
             </div>

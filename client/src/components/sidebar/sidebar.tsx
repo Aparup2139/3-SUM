@@ -20,13 +20,13 @@ const user = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="bg-sidebar-accent border-sidebar-border">
+      <SidebarHeader className="bg-muted-background/90 border-sidebar-border">
         <ComapanyTitle />
       </SidebarHeader>
-      <SidebarContent className="bg-sidebar-accent border-sidebar-border">
+      <SidebarContent className="bg-muted-background/90 border-sidebar-border">
         <NavMain items={dashboardOptions.navMain} />
       </SidebarContent>
-      <SidebarFooter className="bg-sidebar-accent border-sidebar-border">
+      <SidebarFooter className="bg-muted-background/90 border-sidebar-border">
         <NavUser user={user} />
       </SidebarFooter>
       <SidebarRail />
