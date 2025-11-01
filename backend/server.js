@@ -3,65 +3,62 @@ import cors from "cors";
 import dotenv from "dotenv";
 import session from "express-session";
 import passport from "passport";
-import connectDB from "./config/db.js"; // Updated path to src/config
-import authRoutes from "./routes/authRoutes.js"; // Updated path to src/routes
-//import eventRoutes from "./routes/eventRoutes.js"; // Include core platform routes
-//import bookingRoutes from "./routes/bookingRoutes.js"; // Include core platform routes
-import llmRoutes from "./routes/llm_routes.js"; // Updated path to src/routes
+import connectDB from "./config/db.js";
+import authRoutes from "./routes/authRoutes.js";
+// import eventRoutes from "./routes/eventRoutes.js";
+//import bookingRoutes from "./routes/bookingRoutes.js";
+//import llmRoutes from "./routes/llm_routes.js";
 
-// Dependencies for Passport strategy initialization and LLM config
-import "./config/passport.js"; 
-import { initializeLLaMAClient } from "./config/llama.js"; 
+import "./config/passport.js";
+import { initializeLLaMAClient } from "./config/llama.js";
 
 dotenv.config();
 const app = express();
-
-// Initialize the RAG/LLM client before starting the server
-initializeLLaMAClient();
+console.log("hello");
+// Initialize LLaMA client
+//initializeLLaMAClient();
 
 // Connect to MongoDB
-connectDB();
+const dbConnection = await connectDB();
 
 // -----------------------------
 // ⚙️ CORS Configuration
 // -----------------------------
-// Note: In a production environment, only list known domains.
 const allowedOrigins = [
-    "http://localhost:3000", // Example frontend port
-    "http://localhost:8080",
+  "http://localhost:3000",
+  "http://localhost:8080",
 ];
 
 const corsOptions = {
-    origin: function (origin, callback) {
-        // Allow requests with no origin (e.g., Postman, mobile apps)
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            console.log("❌ Blocked by CORS:", origin);
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.log("❌ Blocked by CORS:", origin);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-// ✅ Apply CORS middleware
+// ✅ Apply CORS safely for Express 5
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // Handle all preflight requests
+app.options(/.*/, cors(corsOptions)); // ✅ Use RegExp instead of "*"
 
 // -----------------------------
 // ✅ Express + Passport setup
 // -----------------------------
-app.use(express.json()); // Essential for reading the JSON body of the LLM request
-app.use(express.urlencoded({ extended: true })); // Handle form data
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(
-    session({
-        secret: process.env.SESSION_SECRET || 'a-very-secret-key', // Use fallback for demonstration
-        resave: false,
-        saveUninitialized: false,
-        cookie: { secure: process.env.NODE_ENV === 'production' } // Secure cookies in production
-    })
+  session({
+    secret: process.env.SESSION_SECRET || "a-very-secret-key",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: process.env.NODE_ENV === "production" },
+  })
 );
 app.use(passport.initialize());
 app.use(passport.session());
@@ -70,18 +67,15 @@ app.use(passport.session());
 // 🧩 Routes
 // -----------------------------
 app.use("/api/v1/auth", authRoutes);
-//app.use("/api/v1/events", eventRoutes); // Core event management routes
-app.use("/api/v1/bookings", bookingRoutes); // Core booking/payment routes
-app.use("/api/llm", llmRoutes); // LLM/Chatbot specific route
-
-
-
+// app.use("/api/v1/events", eventRoutes);
+//app.use("/api/v1/bookings", bookingRoutes);
+//app.use("/api/llm", llmRoutes);
 
 // -----------------------------
 // ⚡ Health check
 // -----------------------------
 app.get("/", (req, res) => {
-    res.status(200).send("Backend is live ✅");
+  res.status(200).send("Backend is live ✅");
 });
 
 // -----------------------------
