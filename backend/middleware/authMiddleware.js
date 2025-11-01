@@ -6,6 +6,8 @@ import User from '../models/User.js';
 export const protect = async (req, res, next) => {
     let token;
 
+
+    console.log("Auth Middleware Invoked");
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         try {
             // Get token from header
@@ -16,20 +18,23 @@ export const protect = async (req, res, next) => {
 
             // Get user from token
             req.user = await User.findById(decoded.id).select('-password');
-            
+            console.log("Authenticated user:", req.user);
             if (!req.user) {
+                console.log("terimaa ki chuut")
                 console.error('User not found for the provided token');
                 return res.status(401).json({ message: 'Not authorized, user not found' });
             }
-               
+
             next();
         } catch (error) {
+            console.log("land")
             console.error(error);
             return res.status(401).json({ message: 'Not authorized, token failed' });
         }
     }
 
     if (!token) {
+        
         console.log('No token provided in request headers');
         return res.status(401).json({ message: 'Not authorized, no token' });
     }
