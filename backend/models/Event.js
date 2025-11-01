@@ -51,10 +51,7 @@ const EventSchema = new mongoose.Schema({
         type: Number,
         required: true // Should be updated by a separate service/cron job
     },
-    isPublished: {
-        type: Boolean,
-        default: false
-    },
+   
     createdAt: {
         type: Date,
         default: Date.now
