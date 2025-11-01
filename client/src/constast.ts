@@ -9,28 +9,27 @@ const messagingSenderId = import.meta.env.VITE_messagingSenderId;
 const appId = import.meta.env.VITE_appId;
 const measurementId = import.meta.env.VITE_measurementId;
 const vapidKey = import.meta.env.VITE_vapidKey;
-const fallback_bannerImg = "https://images.unsplash.com/photo-1506765515384-028b60a970df?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-import fallback_profileImg from "@/assets/pfp.png"
-const noPfpImg = "http://localhost:5173/src/assets/pfp.png"
-import logo from "/favicon.png"
-import googleIcon from "@/assets/google.svg"
+const fallback_bannerImg =
+  "https://images.unsplash.com/photo-1506765515384-028b60a970df?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+import fallback_profileImg from "@/assets/pfp.png";
+const noPfpImg = "http://localhost:5173/src/assets/pfp.png";
+import logo from "/favicon.png";
+import googleIcon from "@/assets/google.svg";
 
 export {
-    fallback_profileImg,
-    socketUrl,
-    baseUrl,
-    noPfpImg,
-    fallback_bannerImg,
-    logo,
-    googleIcon,
-}
+  fallback_profileImg,
+  socketUrl,
+  baseUrl,
+  noPfpImg,
+  fallback_bannerImg,
+  logo,
+  googleIcon,
+};
 import {
-  BrainCircuit,
-  ChartColumn,
-  CreditCard,
+  Calendar,
   GalleryVerticalEnd,
+  HelpCircle,
   House,
-  Key,
 } from "lucide-react";
 
 export const dashboardOptions = {
@@ -49,40 +48,30 @@ export const dashboardOptions = {
   navMain: [
     {
       title: "Home",
-      url: "/dashboard",
+      url: "/home",
       icon: House,
       isActive: true,
     },
     {
-      title: "API Keys",
-      url: "/dashboard/api-keys",
-      icon: Key,
+      title: "Bookings",
+      url: "/bookings",
+      icon: Calendar,
     },
     {
-      title: "Usage",
-      url: "/dashboard/usage",
-      icon: ChartColumn,
-    },
-    {
-      title: "Billings",
-      url: "/dashboard/billing",
-      icon: CreditCard,
-    },
-    {
-      title: "Models",
-      url: "/dashboard/models",
-      icon: BrainCircuit,
+      title: "Help & Support",
+      url: "/help-support",
+      icon: HelpCircle,
     },
   ],
 };
 
 export const firebaseConfig = {
-    apiKey,
-    authDomain,
-    projectId,
-    storageBucket,
-    messagingSenderId,
-    appId,
-    measurementId,
-    vapidKey
-}
+  apiKey,
+  authDomain,
+  projectId,
+  storageBucket,
+  messagingSenderId,
+  appId,
+  measurementId,
+  vapidKey,
+};
