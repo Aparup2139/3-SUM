@@ -6,7 +6,7 @@ import passport from "passport";
 import connectDB from "./config/db.js"; // Updated path to src/config
 import authRoutes from "./routes/authRoutes.js"; // Updated path to src/routes
 import eventRoutes from "./routes/eventRoutes.js"; // Include core platform routes
-//import bookingRoutes from "./routes/bookingRoutes.js"; // Include core platform routes
+import bookingRoutes from "./routes/bookingRoutes.js"; // Include core platform routes
 import llmRoutes from "./routes/llmRoutes.js"; // Updated path to src/routes
 
 // Dependencies for Passport strategy initialization and LLM config
@@ -28,6 +28,7 @@ const dbConnection = await connectDB();
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:8080",
+  "http://localhost:5173",
 ];
 
 const corsOptions = {
@@ -69,7 +70,7 @@ app.use(passport.session());
 // -----------------------------
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/events", eventRoutes); // Core event management routes
-//app.use("/api/v1/bookings", bookingRoutes); // Core booking/payment routes
+app.use("/api/v1/bookings", bookingRoutes); // Core booking/payment routes
 app.use("/api/llm", llmRoutes); // LLM/Chatbot specific route
 
 // Verification endpoint for QR code scanner (accessible publicly/separately)

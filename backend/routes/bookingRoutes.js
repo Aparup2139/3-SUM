@@ -1,6 +1,6 @@
 // src/routes/bookingRoutes.js
 import express from 'express';
-import { createOrder, handleWebhook, getMyBookings } from '../controllers/bookingControllers.js';
+import { createOrder, handleWebhook, getMyBookings, getQrCode } from '../controllers/bookingControllers.js';
 import { protect, validateTicketCount } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -10,7 +10,7 @@ const router = express.Router();
 // 'validateTicketCount': Checks if ticketCount <= 5 (Fraud Prevention).
 
 // 1. Initiate Order (Protected & Validated)
-router.post('/create-order', protect, validateTicketCount, createOrder);
+router.post('/create-order/:id', protect,validateTicketCount, createOrder);
 
 // 2. Razorpay Webhook (Public, relies on signature verification inside the controller)
 // Note: This endpoint must match the URL configured in your Razorpay dashboard.
@@ -18,6 +18,9 @@ router.post('/razorpay-webhook', handleWebhook);
 
 // 3. User Booking History
 router.get('/my-tickets', protect, getMyBookings);
+
+// 4. Get QR Code URL for a specific booking
+router.get('/qr/:bookingId', protect, getQrCode); 
 
 export default router;
 

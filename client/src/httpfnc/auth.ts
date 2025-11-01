@@ -2,7 +2,7 @@ import { baseUrl } from "@/constast";
 import type { httpRequstType, UserRole } from "@/types/types";
 
 const LoginUser = async (data: { email: string; password: string }) => {
-  const response = await fetch(baseUrl + `user/login`, {
+  const response = await fetch(baseUrl + `auth/login`, {
     method: "POST",
     credentials: "include",
     headers: {
@@ -16,9 +16,10 @@ const LoginUser = async (data: { email: string; password: string }) => {
 
   const resData: httpRequstType = await response.json();
   if (!response.ok || response.status >= 300) {
-    throw new Error(resData.message || "Failed to login user");
+    throw new Error("Failed to login user");
   }
-  return resData.data;
+  console.log("Login res", resData);
+  return resData.user;
 };
 
 const RegisterUser = async (data: {
@@ -29,7 +30,7 @@ const RegisterUser = async (data: {
 }) => {
   let fcmToken;
 
-  const response = await fetch(baseUrl + `user/signup`, {
+  const response = await fetch(baseUrl + `auth/register`, {
     method: "POST",
     credentials: "include",
     headers: {
@@ -40,9 +41,9 @@ const RegisterUser = async (data: {
 
   const resData: httpRequstType = await response.json();
   if (!response.ok || response.status >= 300) {
-    throw new Error(resData.message || "Failed to register user");
+    throw new Error("Failed to register user");
   }
-  return resData.data;
+  return resData.user;
 };
 
 const checkAuth = async () => {
@@ -56,9 +57,9 @@ const checkAuth = async () => {
 
   const resData: httpRequstType = await response.json();
   if (!response.ok || response.status >= 300) {
-    throw new Error(resData.message || "user not authenticated, go to login");
+    throw new Error("user not authenticated, go to login");
   }
-  return resData.data;
+  return resData.token ? resData.user : null;
 };
 
 const logout = async () => {
@@ -72,13 +73,13 @@ const logout = async () => {
 
   const resData: httpRequstType = await response.json();
   if (!response.ok || response.status >= 300) {
-    throw new Error(resData.message || "failed to logout user");
+    throw new Error("failed to logout user");
   }
   return resData.data;
 };
 
 const getOauthWindow = async () => {
-  const response = await fetch(baseUrl + `user/oauth/get-consent-window`, {
+  const response = await fetch(baseUrl + `auth/google`, {
     method: "GET",
     credentials: "include",
     headers: {
@@ -87,8 +88,9 @@ const getOauthWindow = async () => {
   });
 
   const resData: httpRequstType = await response.json();
+  console.log("The getOauth res", resData)
   if (!response.ok || response.status >= 300) {
-    throw new Error(resData.message || "failed to get OAuth window");
+    throw new Error("failed to get OAuth window");
   }
   return resData.data;
 };

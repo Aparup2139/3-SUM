@@ -25,7 +25,7 @@ const BookingSchema = new mongoose.Schema({
     },
     paymentId: {
         type: String,
-        required: true // Razorpay transaction ID
+      //  required: true // Razorpay transaction ID
     },
     razorpayStatus: {
         type: String,
@@ -35,7 +35,7 @@ const BookingSchema = new mongoose.Schema({
     // Unique key for the QR code verification URL
     qrCodeKey: {
         type: String,
-        required: true,
+      //  required: true,
         unique: true
     },
     // Fraud Prevention: Prevents reuse after entry scan

@@ -7,7 +7,7 @@ import { AuthPage } from './components/pagesUi/authPage/authPage'
 import { RootPageLayout } from './components/landingpage/rootPageLayout'
 import { LandingPage } from './components/landingpage/landingpage'
 
-import { OAuthPage } from './components/pagesUi/authPage/OAuthPage'
+// import { OAuthPage } from './components/pagesUi/authPage/OAuthPage'
 import { EventCityPage } from './pages/EventCityPage'
 import { SpecificEventPage } from './pages/SpecificEventPage'
 import ProfilePage from './pages/profilePage'
@@ -28,10 +28,10 @@ const router = createBrowserRouter([
         element: <AuthPage />,
       },
 
-      {
-        path: "oauth",
-        element: <OAuthPage />
-      },
+      // {
+      //   path: "oauth",
+      //   element: <OAuthPage />
+      // },
 
 
     ]

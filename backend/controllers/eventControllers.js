@@ -1,131 +1,165 @@
 import Event from "../models/Event.js";
+import asyncHandler from 'express-async-handler'; // Recommended for handling async errors
 
-const getAllEvents = async (req, res) => {
-    try {
-        const events = await Event.find();
-        res.status(200).json(events);
-    } catch (error) {
-        res.status(500).json({ message: "Server Error", error });
+// --- 1. GET Events with Filters ---
+const getAllEvents = asyncHandler(async (req, res) => {
+    const { city, category, userQuery: titleQuery } = req.query;
+
+    let filter = {
+        isPublished: true,
+        date: { $gte: new Date() }
+    };
+
+    if (city) {
+        filter.city = { $regex: city, $options: 'i' }; 
     }
-};
-
-const createEvent = async (req, res) => {
-    try {
-        console.log(req.user);
-       const  {organizer}  = req.user.id;
-        const { title, description, date, venue,city, category, totalTickets, basePrice, priceMin, priceMax } = req.body;
-        if(!title || !description || !organizer || !date || !totalTickets || !basePrice || !priceMin || !priceMax){
-            return res.status(400).json({message:"Please provide all required fields"});
-        }
-        const newEvent = new Event({
-            title,
-            description,    
-            organizer,
-            date,
-            venue,
-            city,
-            category,
-            totalTickets,
-            basePrice,
-            priceMin,
-            priceMax,
-            currentPrice: basePrice
-        });
-        await newEvent.save();
-        res.status(201).json({newEvent,msg:"Event created successfully"});
-    } catch (error) {
-        res.status(500).json({ message: "Server Error", error });
-    }   
-};
-
-const updateEvent = async (req, res) => {
-   const eventId= req.params.id;
-   const updates = req.body;
-   try {
-    const updatedEvent = await Event.findByIdAndUpdate(eventId, updates, {new:true});
-    if(!updatedEvent){
-        return res.status(404).json({message:"Event not found"});
+    if (category) {
+        filter.category = { $regex: category, $options: 'i' };
     }
-    res.status(200).json({updatedEvent,msg:"Event updated successfully"});
-   } catch (error) {
-    res.status(500).json({ message: "Server Error", error });
-   }
-};
+    if (titleQuery) {
+        filter.title = { $regex: titleQuery, $options: 'i' }; 
+    }
+    
+    const events = await Event.find(filter).sort({ date: 1 });
 
-const deleteEvent = async (req, res) => {
-   const eventId= req.params.id;
-   try {
+    if (events.length === 0) {
+        return res.status(404).json({ message: "No events found matching your criteria." });
+    }
+
+    res.status(200).json({
+        count: events.length,
+        events,
+        message: "Events fetched successfully with applied filters."
+    });
+});
+
+// --- 2. POST Create Event (Logic restored from previous prompt) ---
+const createEvent = asyncHandler(async (req, res) => {
+    // Note: You must ensure req.user is available via 'protect' middleware
+    const organizer = req.user._id || req.user.id;
+    const { title, description, date, venue, city, category, totalTickets, basePrice, priceMin, priceMax } = req.body;
+    
+    // Basic validation
+    if (!title || !description || !organizer || !date || !totalTickets || !basePrice || !priceMin || !priceMax) {
+        res.status(400);
+        throw new Error("Please provide all required fields.");
+    }
+
+    const newEvent = new Event({
+        title,
+        description,
+        organizer,
+        date,
+        venue,
+        city,
+        category,
+        totalTickets,
+        basePrice,
+        priceMin,
+        priceMax,
+        currentPrice: basePrice, // Initialize current price to base price
+        isPublished: false // Default to false until organizer manually publishes
+    });
+    
+    await newEvent.save();
+    res.status(201).json({ newEvent, msg: "Event created successfully" });
+});
+
+// --- 3. PUT Update Event (Logic restored from previous prompt) ---
+const updateEvent = asyncHandler(async (req, res) => {
+    const eventId = req.params.id;
+    const updates = req.body;
+
+    const updatedEvent = await Event.findByIdAndUpdate(eventId, updates, { new: true, runValidators: true });
+    
+    if (!updatedEvent) {
+        res.status(404);
+        throw new Error("Event not found");
+    }
+    res.status(200).json({ updatedEvent, msg: "Event updated successfully" });
+});
+
+// --- 4. DELETE Event (Logic restored from previous prompt) ---
+const deleteEvent = asyncHandler(async (req, res) => {
+    const eventId = req.params.id;
+
     const deletedEvent = await Event.findByIdAndDelete(eventId);
-    if(!deletedEvent){
-        return res.status(404).json({message:"Event not found"});
+    
+    if (!deletedEvent) {
+        res.status(404);
+        throw new Error("Event not found");
     }
-    res.status(200).json({msg:"Event deleted successfully"});
-   } catch (error) {
-    res.status(500).json({ message: "Server Error", error });
-   }
-};
-const getEventDetailsById = async (req, res) => {
-    try {
-        const eventId = req.params.id;
-        const event = await Event.findById(eventId);
-        if (!event) {
-            return res.status(404).json({ message: "Event not found" });
-        }   
-        res.status(200).json(event);
-    } catch (error) {
-        res.status(500).json({ message: "Server Error", error });
-    }
-};
+    res.status(200).json({ msg: "Event deleted successfully" });
+});
 
-const getUserpastevents = async (req, res) => {
-   const userId = req.params.userId;
-   if(!userId){
-    return res.status(400).json({message:"User ID is required"});
-   }
-    try {
-        const currentDate = new Date();
-        const pastEvents = await Event.find({
-            organizer: userId,
-            date: { $lt: currentDate }
-        });
-        res.status(200).json({pastEvents,msg:"Past events fetched successfully"});
-    } catch (error) {
-        res.status(500).json({ message: "Server Error", error });
-    }
-};
-const getUserupcomingevents = async (req, res) => {
+// --- 5. GET Event Details by ID (Logic restored from previous prompt) ---
+const getEventDetailsById = asyncHandler(async (req, res) => {
+    const eventId = req.params.id;
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+        res.status(404);
+        throw new Error("Event not found");
+    } 
+    res.status(200).json(event);
+});
+
+// --- 6. GET Past Events by User ID (Logic restored from previous prompt) ---
+const getUserpastevents = asyncHandler(async (req, res) => {
     const userId = req.params.userId;
-    if(!userId){
-     return res.status(400).json({message:"User ID is required"});
+    if (!userId) {
+        res.status(400);
+        throw new Error("User ID is required");
     }
-        try {
-            const currentDate = new Date();
-            const upcomingEvents = await Event.find({
-                organizer: userId,
-                date: { $gte: currentDate }
-            });
-            res.status(200).json({upcomingEvents,msg:"Upcoming events fetched successfully"});
-        } catch (error) {
-            res.status(500).json({ message: "Server Error", error });
-        }   
-};
 
-const geteventhostedbyuser = async (req, res) => {
-    const userId = req.params.userId;   
-    if(!userId){
-     return res.status(400).json({message:"User ID is required"});
+    const currentDate = new Date();
+    const pastEvents = await Event.find({
+        organizer: userId,
+        date: { $lt: currentDate }
+    }).sort({ date: -1 }); // Sort by most recent past event
+
+    res.status(200).json({ pastEvents, msg: "Past events fetched successfully" });
+});
+
+// --- 7. GET Upcoming Events by User ID (Logic restored from previous prompt) ---
+const getUserupcomingevents = asyncHandler(async (req, res) => {
+    const userId = req.params.userId;
+    if (!userId) {
+        res.status(400);
+        throw new Error("User ID is required");
     }
-        try {
-            const hostedEvents = await Event.find({
-                organizer: userId
-            });
-            res.status(200).json({hostedEvents,msg:"Events hosted by user fetched successfully"});
-        } catch (error) {
-            res.status(500).json({ message: "Server Error", error });
-        }   
+
+    const currentDate = new Date();
+    const upcomingEvents = await Event.find({
+        organizer: userId,
+        date: { $gte: currentDate }
+    }).sort({ date: 1 }); // Sort by nearest upcoming event
+
+    res.status(200).json({ upcomingEvents, msg: "Upcoming events fetched successfully" });
+});
+
+// --- 8. GET All Events Hosted by User (Logic restored from previous prompt) ---
+const geteventhostedbyuser = asyncHandler(async (req, res) => {
+    const userId = req.params.userId;
+    if (!userId) {
+        res.status(400);
+        throw new Error("User ID is required");
+    }
+
+    const hostedEvents = await Event.find({ organizer: userId }).sort({ date: -1 });
+
+    res.status(200).json({ hostedEvents, msg: "Events hosted by user fetched successfully" });
+});
+
+
+// --- Final Export ---
+export { 
+    getAllEvents, 
+    createEvent, 
+    updateEvent, 
+    deleteEvent, 
+    getEventDetailsById, 
+    getUserpastevents, 
+    getUserupcomingevents, 
+    geteventhostedbyuser 
 };
-
-
-
-
-export { getAllEvents, createEvent, updateEvent, deleteEvent, getEventDetailsById, getUserpastevents, getUserupcomingevents, geteventhostedbyuser }; 

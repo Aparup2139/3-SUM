@@ -2,12 +2,17 @@ import passport from "passport";
 import express from "express";
 import jwt from "jsonwebtoken";
 import { registerUser, loginUser } from "../controllers/authControllers.js";
-
+import { logout,deleteUser, profile,updateprofile } from "../controllers/authControllers.js";
 const router = express.Router();
+import { protect } from "../middleware/authMiddleware.js";
 
 // Existing imports for registerUser and loginUser
 router.post("/register", registerUser);
 router.post("/login", loginUser);
+router.put("/profileupdate", protect, updateprofile);
+router.get("/logout", logout);
+router.delete("/delete", deleteUser);
+router.get("/me", protect,profile);
 
 // ✅ Google Auth route
 router.get(
@@ -20,7 +25,7 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "https://gatequest.netlify.app/auth.html",
+    failureRedirect: "http://localhost:5173/login",
   }),
   (req, res) => {
     // 1. Create the token
@@ -40,9 +45,10 @@ router.get(
     const userQuery = encodeURIComponent(JSON.stringify(user)); // 4. Redirect with BOTH token and user in the query
 
     res.redirect(
-      `https://gatequest.netlify.app/auth.html?token=${token}&user=${userQuery}`
+      `http://localhost:5173/dashboard?token=${token}&user=${userQuery}`
     );
   }
 );
+
 
 export default router;
