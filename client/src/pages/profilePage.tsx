@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   User,
   Mail,
@@ -11,8 +11,12 @@ import {
   Linkedin,
   Save,
 } from "lucide-react";
+import ProfilePalette from "@/components/ui/profilePallete";
+import { ProfileImageData } from "@/constast";
 
 export default function ProfilePage() {
+  const [profilePic, setProfilePic] = useState<string>("");
+  const [isEditingProfilePic, setIsEditingProfilePic] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState({
     name: "John Doe",
@@ -22,7 +26,13 @@ export default function ProfilePage() {
     youtube: "@johndoechannel",
     linkedin: "johndoe",
   });
-
+  useEffect(() => {
+    ProfileImageData.forEach((item) => {
+      if (item.id === 1) {
+        setProfilePic(item.url);
+      }
+    });
+  }, []);
   const handleEdit = () => {
     setIsEditing(!isEditing);
   };
@@ -34,7 +44,13 @@ export default function ProfilePage() {
   const handleChange = (field: string, value: string) => {
     setProfile({ ...profile, [field]: value });
   };
-
+  const handleProfilePicChange = (id: number) => {
+    const selectedImage = ProfileImageData.find((item) => item.id === id);
+    if (selectedImage) {
+      setProfilePic(selectedImage.url);
+    }
+    setIsEditingProfilePic(false);
+  };
   return (
     <div className="flex bg-background w-full h-full overflow-auto">
       <div className="flex-1 bg-background">
@@ -49,15 +65,33 @@ export default function ProfilePage() {
             <div className="flex flex-col items-center justify-center lg:min-w-[240px]">
               <div className="relative mb-4">
                 <div className="w-28 h-28 rounded-full bg-gradient-to-br from-blue-500 via-purple-500 to-purple-600 flex items-center justify-center">
-                  <User
-                    size={48}
-                    className="text-foreground"
-                    strokeWidth={1.5}
-                  />
+                  {profilePic ? (
+                    <img
+                      src={profilePic}
+                      alt="Profile Picture"
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  ) : (
+                    <User
+                      size={48}
+                      className="text-foreground"
+                      strokeWidth={1.5}
+                    />
+                  )}
                 </div>
-                <button className="absolute bottom-1 right-1 p-2 bg-background rounded-full shadow-lg hover:bg-background/80 cursor-pointer border border-foreground/10">
+                <button
+                  className="absolute bottom-1 right-1 p-2 bg-background rounded-full shadow-lg hover:bg-background/80 cursor-pointer border border-foreground/10"
+                  onClick={() => setIsEditingProfilePic(true)}
+                >
                   <Edit2 size={12} className="text-foreground" />
                 </button>
+                {isEditingProfilePic && (
+                  <ProfilePalette
+                    data={ProfileImageData}
+                    onClose={() => setIsEditingProfilePic(false)}
+                    handleProfilePicChange={handleProfilePicChange}
+                  />
+                )}
               </div>
               <h2 className="text-xl font-semibold text-foreground mb-1.5">
                 {profile.name}

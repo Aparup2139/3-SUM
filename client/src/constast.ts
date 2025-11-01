@@ -25,12 +25,7 @@ export {
   logo,
   googleIcon,
 };
-import {
-  Calendar,
-  GalleryVerticalEnd,
-  HelpCircle,
-  House,
-} from "lucide-react";
+import { Calendar, GalleryVerticalEnd, HelpCircle, House } from "lucide-react";
 
 export const dashboardOptions = {
   user: {
@@ -64,6 +59,45 @@ export const dashboardOptions = {
     },
   ],
 };
+
+export const ProfileImageData = [
+  {
+    id: 1,
+    url: "https://randomuser.me/api/portraits/men/1.jpg",
+  },
+  {
+    id: 2,
+    url: "https://randomuser.me/api/portraits/men/32.jpg",
+  },
+  {
+    id: 3,
+    url: "https://randomuser.me/api/portraits/men/45.jpg",
+  },
+  {
+    id: 4,
+    url: "https://randomuser.me/api/portraits/men/67.jpg",
+  },
+  {
+    id: 5,
+    url: "https://randomuser.me/api/portraits/women/12.jpg",
+  },
+  {
+    id: 6,
+    url: "https://randomuser.me/api/portraits/women/28.jpg",
+  },
+  {
+    id: 7,
+    url: "https://randomuser.me/api/portraits/women/44.jpg",
+  },
+  {
+    id: 8,
+    url: "https://randomuser.me/api/portraits/women/65.jpg",
+  },
+  {
+    id: 9,
+    url: "https://randomuser.me/api/portraits/women/89.jpg",
+  },
+];
 
 export const firebaseConfig = {
   apiKey,
