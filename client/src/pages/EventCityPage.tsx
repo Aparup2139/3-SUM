@@ -1,19 +1,21 @@
-import { RightContent } from "@/components/pagesUi/tasksPageUI/rightContent"
-import { LeftContent } from "@/components/pagesUi/tasksPageUI/leftContent"
-import { PageWrapper } from "@/components/pagesWrapper/pagesWrapper"
-import { ChevronDown } from "lucide-react"
-import { useParams } from "react-router-dom"
-import { useState } from "react"
-import { CitySelectorDialog } from "@/components/selectCityeSelector"
 
-export const HomePage = () => {
+import { LeftContent } from "@/components/pagesUi/eventCityPage/leftContent"
+import { PageWrapper } from "@/components/pagesWrapper/pagesWrapper"
+import { CitySelectorDialog } from "@/components/selectCityeSelector"
+import { ChevronDown } from "lucide-react"
+import { useState } from "react"
+import { useParams } from "react-router-dom"
+
+import { RightContent } from "@/components/pagesUi/tasksPageUI/rightContent"
+export const EventCityPage = () => {
     const { cityName } = useParams();
     const [open, setOpen] = useState(cityName ? false : true)
 
+
     return (<PageWrapper
-        headerText="Home"
+        headerText=""
         HeaderJSX={<>
-            <CitySelectorDialog
+            <CitySelectorDialog 
             setOpen={setOpen}
             open={open} onClose={() => setOpen(false)} />
             <div

@@ -9,6 +9,8 @@ import { RootPageLayout } from './components/landingpage/rootPageLayout'
 import { LandingPage } from './components/landingpage/landingpage'
 
 import { OAuthPage } from './components/pagesUi/authPage/OAuthPage'
+import { EventCityPage } from './pages/EventCityPage'
+import { SpecificEventPage } from './pages/SpecificEventPage'
 const router = createBrowserRouter([
 
   {
@@ -39,7 +41,21 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/home",
-        element: <HomePage />
+        children: [
+          {
+            index: true,
+            element: <HomePage />
+          },
+
+          {
+            path: ":cityName",
+            element: <EventCityPage />,
+          },
+          {
+            path: "event/:eventId",
+            element: <SpecificEventPage />,
+          }
+        ]
       },
       {
         path: "/profile",

@@ -23,7 +23,7 @@ interface EventCardProps {
   loading?: boolean;
 }
 
-export default function EventCard({
+export function TrendingEventCard({
   title = "Tech Innovators Summit 2025",
   short_description = "A premier event showcasing future technology trends.",
   start_date = new Date("2025-02-15T09:00:00Z"),
@@ -53,7 +53,7 @@ export default function EventCard({
 
   if (loading) {
     return (
-      <Card className="overflow-hidden  border-slate-800 bg-slate-900/50 backdrop-blur w-full max-w-3xl">
+      <Card className="overflow-hidden border-slate-800 bg-slate-900/50 backdrop-blur w-full max-w-3xl">
         <Skeleton className="h-48 w-full bg-slate-800" />
         <CardHeader className="space-y-3">
           <Skeleton className="h-6 w-3/4 bg-slate-800" />

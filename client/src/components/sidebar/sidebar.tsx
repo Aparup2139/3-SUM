@@ -1,12 +1,11 @@
 import { Bell, CalendarArrowDown, Home, House, Info, LogOutIcon, MessageCircle, StickyNote, UserRoundPen, } from "lucide-react"
 import { useEffect, useState, type ReactNode } from "react"
-import logoImage from "/favicon.png"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useScreenSizeStore } from "@/store/screenSizestate.store"
 import { LogoutBox } from "../dialogbox/logout"
 import { useUserStore } from "@/store/user.store"
 import { Skeleton } from "../ui/skeleton"
-import { UserRole } from "@/types/types"
+
 import { fallback_profileImg } from "@/constast"
 
 interface SidebarItem {
