@@ -3,15 +3,15 @@ import cors from "cors";
 import dotenv from "dotenv";
 import session from "express-session";
 import passport from "passport";
-import connectDB from "./src/config/db.js"; // Updated path to src/config
-import authRoutes from "./src/routes/authRoutes.js"; // Updated path to src/routes
-import eventRoutes from "./src/routes/eventRoutes.js"; // Include core platform routes
-import bookingRoutes from "./src/routes/bookingRoutes.js"; // Include core platform routes
-import llmRoutes from "./src/routes/llmRoutes.js"; // Updated path to src/routes
+import connectDB from "./config/db.js"; // Updated path to src/config
+import authRoutes from "./routes/authRoutes.js"; // Updated path to src/routes
+//import eventRoutes from "./routes/eventRoutes.js"; // Include core platform routes
+//import bookingRoutes from "./routes/bookingRoutes.js"; // Include core platform routes
+import llmRoutes from "./routes/llm_routes.js"; // Updated path to src/routes
 
 // Dependencies for Passport strategy initialization and LLM config
-import "./src/config/passport.js"; 
-import { initializeLLaMAClient } from "./src/config/llama.js"; 
+import "./config/passport.js"; 
+import { initializeLLaMAClient } from "./config/llama.js"; 
 
 dotenv.config();
 const app = express();
@@ -70,13 +70,11 @@ app.use(passport.session());
 // 🧩 Routes
 // -----------------------------
 app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/events", eventRoutes); // Core event management routes
+//app.use("/api/v1/events", eventRoutes); // Core event management routes
 app.use("/api/v1/bookings", bookingRoutes); // Core booking/payment routes
 app.use("/api/llm", llmRoutes); // LLM/Chatbot specific route
 
-// Verification endpoint for QR code scanner (accessible publicly/separately)
-import { verifyTicket } from "./src/controllers/bookingController.js";
-app.get("/verification/bookId/:qrCodeKey", verifyTicket); 
+
 
 
 // -----------------------------

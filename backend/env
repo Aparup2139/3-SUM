@@ -6,3 +6,4 @@ GOOGLE_CALLBACK_URL=https://localhost:5000/api/v1/auth/google/callback
 JWT_SECRET=b4bb532cf4b72245327c089e6981cc7efa779f199bae71ac4c8b7f82a8570eb6
 HF_ACCESS_TOKEN=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
 HF_MODEL=meta-llama/Llama-3.1-8B-Instruct:novita
+
