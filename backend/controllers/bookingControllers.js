@@ -7,19 +7,19 @@ import * as bookingService from '../services/bookingService.js';
 // @access  Protected
 export const createOrder = asyncHandler(async (req, res) => {
     // req.user is populated by 'protect' middleware
-    const userId = req.user._id; 
-    const { eventId, ticketCount, totalAmount } = req.body;
+    const user= req.user._id||req.user.id; 
+    const { event, ticketCount, totalAmount} = req.body;
 
     // Note: Validation (max 5 tickets) is handled by middleware, but a final check here is good practice.
-    if (!eventId || !ticketCount || !totalAmount) {
+    if (!event || !ticketCount || !totalAmount) {
         res.status(400);
         throw new Error('Missing required booking details (eventId, ticketCount, totalAmount).');
     }
 
     // Service handles communication with Razorpay and preliminary booking storage
     const result = await bookingService.initiatePaymentOrder(
-        userId, 
-        eventId, 
+        user, 
+        event, 
         ticketCount, 
         totalAmount
     );

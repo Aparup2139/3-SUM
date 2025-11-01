@@ -11,11 +11,16 @@ const getAllEvents = async (req, res) => {
 
 const createEvent = async (req, res) => {
     try {
-        console.log(req.user);
-       const  {organizer}  = req.user.id;
+        console.log("user",req.user);
+const organizer = req.user._id || req.user.id;
+       console.log(req.body);
         const { title, description, date, venue,city, category, totalTickets, basePrice, priceMin, priceMax } = req.body;
+        if(!organizer){
+            console.log("Organizer missing",organizer);
+            return res.status(400).json({message:"Organizer information is missing"});
+        }
         if(!title || !description || !organizer || !date || !totalTickets || !basePrice || !priceMin || !priceMax){
-            return res.status(400).json({message:"Please provide all required fields"});
+            return res.status(400).json({message:"Please provide all required fieldsmjbjkhjhjbjhvhjb"});
         }
         const newEvent = new Event({
             title,
