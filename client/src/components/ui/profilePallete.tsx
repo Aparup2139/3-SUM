@@ -23,17 +23,17 @@ const ProfilePalette: React.FC<{
           </button>
         )}
       </div>
-      <div className="grid grid-cols-4 gap-2.5">
+      <div className="flex flex-wrap gap-3 justify-center">
         {data.map((item) => (
           <div
             key={item.id}
-            className="aspect-square rounded-md overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary transition-all hover:scale-105"
+            className="aspect-square rounded-full overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary transition-all hover:scale-105"
             onClick={() => handleProfilePicChange(item.id)}
           >
             <img
               src={item.url}
               alt={`Palette ${item.id}`}
-              className="w-full h-full object-cover"
+              className="w-12 h-12 object-cover rounded-full"
             />
           </div>
         ))}
