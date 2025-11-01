@@ -160,8 +160,7 @@ const NavItem = ({ mobileView, text, icon }: { mobileView: boolean, text: string
         className={`${selected && username ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border"
             : "border-transparent text-foreground"} items-center border rounded-sm flex py-2 cursor-pointer ${text === "Tubespace" ?
                 `mb-6 gap-2 ${!mobileView ? "pl-3 pr-2" : ""}` : `gap-4 ${mobileView ? "px-2" : "px-5"} hover:border-sidebar-border `}" `} >
-        {!username && text.toLowerCase() !== "tubespace" && <Skeleton className="h-[25px] w-[25px] rounded-full" />}
-        {!username && !mobileView && text.toLowerCase() !== "tubespace" && <Skeleton className="h-[25px] w-[100px] rounded-sm" />}
+       
         {(username || text.toLowerCase() === "tubespace") && <span>{icon}</span>}
         {(username || text.toLowerCase() === "tubespace") && !mobileView && <h2 className={`${text === "Tubespace" && "mt-1 ml-1"}`} >{text}</h2>}
 
