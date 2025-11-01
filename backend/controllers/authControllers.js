@@ -99,10 +99,18 @@ const profile= async (req,res)=>{
   } 
 };
 
-const logout= async (req,res)=>{
-  // Since JWT is stateless, logout can be handled on the client side by deleting the token.
-  res.status(200).json({message:"User logged out successfully"});
-}
+  const logout= async (req,res)=>{
+    const token=req.headers.authorization?.split(" ")[1];
+    if(!token){
+      return res.status(400).json({ message: "Token is required for logout" });
+    }
+    const decoded=jwt.decode(token);
+    if(!decoded){
+      return  res.status(400).json({ message: "Invalid token" });
+    }
+    const userId=decoded.id;
+    res.status(200).json({message:"User logged out successfully"});
+  }
 const deleteUser= async (req,res)=>{
   try {
     const id=req.user._id||req.user.id; 
