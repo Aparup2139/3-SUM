@@ -1,0 +1,73 @@
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { RootLayout } from './pages/rootlayout'
+import { ProfilePage } from './pages/profilePage'
+import { HomePage } from './pages/taskPage'
+import { NotificationPage } from './pages/notificationPage'
+import { MessagesPage } from './pages/messagePage'
+import { AuthPage } from './components/pagesUi/authPage/authPage'
+import { RootPageLayout } from './components/landingpage/rootPageLayout'
+import { LandingPage } from './components/landingpage/landingpage'
+
+import { OAuthPage } from './components/pagesUi/authPage/OAuthPage'
+const router = createBrowserRouter([
+
+  {
+    path: "/",
+    element: <RootPageLayout />,
+    children: [
+      {
+        index: true,
+        element: <LandingPage />
+      },
+
+      {
+        path: "auth",
+        element: <AuthPage />,
+      },
+
+      {
+        path: "oauth",
+        element: <OAuthPage />
+      },
+
+
+    ]
+  },
+  {
+    path: "/",
+    element: <RootLayout />,
+    children: [
+      {
+        path: "/home",
+        element: <HomePage />
+      },
+      {
+        path: "/profile",
+        element: <ProfilePage />
+      },
+      {
+        path: "/orders",
+        element: <MessagesPage />
+      },
+      {
+        path: "/help",
+        element: <NotificationPage />
+      },
+    ],
+  },
+  {
+    path: "/admin-panel",
+    element: <div> Admin panel </div>
+  }
+])
+
+
+function App() {
+
+  return (
+    <RouterProvider router={router}>
+    </RouterProvider>
+  )
+}
+
+export default App
