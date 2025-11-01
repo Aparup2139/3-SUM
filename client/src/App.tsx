@@ -1,6 +1,5 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { RootLayout } from './pages/rootlayout'
-import { ProfilePage } from './pages/profilePage'
 import { HomePage } from './pages/taskPage'
 import { NotificationPage } from './pages/notificationPage'
 import { MessagesPage } from './pages/messagePage'
@@ -9,6 +8,7 @@ import { RootPageLayout } from './components/landingpage/rootPageLayout'
 import { LandingPage } from './components/landingpage/landingpage'
 
 import { OAuthPage } from './components/pagesUi/authPage/OAuthPage'
+import ProfilePage from './pages/profilePage'
 const router = createBrowserRouter([
 
   {

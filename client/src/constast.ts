@@ -24,6 +24,57 @@ export {
     logo,
     googleIcon,
 }
+import {
+  BrainCircuit,
+  ChartColumn,
+  CreditCard,
+  GalleryVerticalEnd,
+  House,
+  Key,
+} from "lucide-react";
+
+export const dashboardOptions = {
+  user: {
+    name: "shadcn",
+    email: "m@example.com",
+    avatar: "/avatars/shadcn.jpg",
+  },
+  title: [
+    {
+      name: "PhotoGPT Devs",
+      logo: GalleryVerticalEnd,
+      plan: "",
+    },
+  ],
+  navMain: [
+    {
+      title: "Home",
+      url: "/dashboard",
+      icon: House,
+      isActive: true,
+    },
+    {
+      title: "API Keys",
+      url: "/dashboard/api-keys",
+      icon: Key,
+    },
+    {
+      title: "Usage",
+      url: "/dashboard/usage",
+      icon: ChartColumn,
+    },
+    {
+      title: "Billings",
+      url: "/dashboard/billing",
+      icon: CreditCard,
+    },
+    {
+      title: "Models",
+      url: "/dashboard/models",
+      icon: BrainCircuit,
+    },
+  ],
+};
 
 export const firebaseConfig = {
     apiKey,
