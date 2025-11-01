@@ -159,7 +159,7 @@ const NavItem = ({ mobileView, text, icon }: { mobileView: boolean, text: string
                 `mb-6 gap-2 ${!mobileView ? "pl-3 pr-2" : ""}` : `gap-4 ${mobileView ? "px-2" : "px-5"} hover:border-sidebar-border `}" `} >
 
         <span>{icon}</span>
-        {!mobileView && <h2 className={`${text === "Tubespace" && "mt-1 ml-1"}`} >{text}</h2>}
+        <h2 className={`${text === "Tubespace" && "mt-1 ml-1"}`} >{text}</h2>
 
     </span>)
 }

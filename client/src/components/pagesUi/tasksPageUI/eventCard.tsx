@@ -141,7 +141,11 @@ export default function EventCard({
             <p className="text-lg font-bold text-white">₹{currentPrice.toLocaleString()}</p>
           </div>
           <div className="flex gap-2">
-            {admin ? <Button variant="outline" className="
+            {admin ? <Button
+              onClick={() =>
+                navigate(`/admin-panel/analytics?id=${id}&title=${encodeURIComponent(title)}`)
+              }
+              variant="outline" className="
              bg-gradient-to-r from-purple-700 via-pink-700 to-orange-700
             text-primary border-background hover:bg-slate-800">
               <Sparkles /> Get Analytics
