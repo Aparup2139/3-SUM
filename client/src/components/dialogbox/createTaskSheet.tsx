@@ -10,7 +10,7 @@ import { useOpenTaskUpdate } from "@/store/updateTaskSheet";
 import { useState } from "react";
 
 export function CreateTaskSheet({ type = 1, TriggerJsx = <><FilePlus /> Create Event</> }: { type?: number, TriggerJsx?: React.ReactNode }) {
-  const [submitting, setSubmitting] = useState(false);
+  const [submitting] = useState(false);
   const [explicitOpen, setExplicitOpen] = useState(false)
   const { resetState, taskId } = useOpenTaskUpdate((state) => state);
 

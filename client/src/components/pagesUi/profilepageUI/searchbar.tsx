@@ -15,7 +15,6 @@ import { useQuery } from "@tanstack/react-query"
 import { Skeleton } from "@/components/ui/skeleton"
 import { type userSearchType } from "@/types/types"
 import { searchUsers } from "@/httpfnc/user"
-import { toast } from "sonner"
 import { fallback_profileImg } from "@/constast"
 
 export const SearchBar = () => {
@@ -39,7 +38,7 @@ export function CommandDialogDemo({ open, setOpen }: { open: boolean, setOpen: (
 
         document.addEventListener("keydown", down)
         return () => document.removeEventListener("keydown", down)
-    }, [])
+    }, [open, setOpen])
 
     const timer = useRef<NodeJS.Timeout | null>(null)
     const [query, setQuery] = useState("")

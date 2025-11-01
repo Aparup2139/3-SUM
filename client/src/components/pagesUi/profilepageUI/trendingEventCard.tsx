@@ -33,8 +33,6 @@ export function TrendingEventCard({
   totalTickets = 500,
   ticketsSold = 320,
   currentPrice = 2200,
-  priceMin = 1500,
-  priceMax = 3500,
   loading = false,
 }: EventCardProps) {
   const formatDate = (date: Date) => {

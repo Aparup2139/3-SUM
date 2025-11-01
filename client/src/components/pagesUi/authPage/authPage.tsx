@@ -41,7 +41,7 @@ export function AuthPage() {
     role: UserRole.NORMAL,
   });
   const [loading, setLoading] = useState<boolean>(false);
-  const [oauthLoading, setOauthLoading] = useState<boolean>(false);
+  const [oauthLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const { setUser } = useAuth();
   const handleSubmit = async () => {
