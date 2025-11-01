@@ -12,7 +12,7 @@ const generateToken = (id) => {
 
 // Register User
 export const registerUser = async (req, res) => {
-  const { fullName, email, password, role = 'user' } = req.body; // <-- default to 'user'
+  const { fullName, email, password, role = "user" } = req.body; // <-- default to 'user'
   console.log(req.body);
   if (!fullName || !email || !password) {
     return res.status(400).json({ message: "Please fill all fields" });
@@ -37,11 +37,10 @@ export const registerUser = async (req, res) => {
   }
 };
 
-
 // Login User
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
-
+  console.log(req.body);
   if (!email || !password) {
     return res.status(400).json({ message: "Please fill all fields" });
   }
@@ -49,14 +48,16 @@ export const loginUser = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
+      console.log("User not found");
       return res.status(400).json({ message: "Invalid Email" });
     }
 
     const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
+      console.log("Invalid password");
       return res.status(400).json({ message: "Invalid Password" });
     }
-
+    console.log("Loggedin user is", user)
     res.status(200).json({
       _id: user._id,
       user,
