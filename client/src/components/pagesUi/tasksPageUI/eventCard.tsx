@@ -97,7 +97,6 @@ export default function EventCard({
   }
   const handleTicketBooking = () => {
     setIsBooking(true);
-    alert("Ticket booking modal would open here.");
   };
 
   return (
