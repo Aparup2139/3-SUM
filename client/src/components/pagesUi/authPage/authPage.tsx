@@ -22,15 +22,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { UserRole, type AuthDataType } from "@/types/types";
-import { getOauthWindow, LoginUser, RegisterUser } from "@/httpfnc/auth";
+import { UserRole, type User } from "@/types/types";
+import { LoginUser, RegisterUser } from "@/httpfnc/auth";
 import { useNavigate } from "react-router-dom";
-import { useUserStore } from "@/store/user.store";
-import { googleIcon } from "@/constast";
+import { baseUrl, googleIcon } from "@/constast";
 import { Loader2Icon } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { GradientText } from "@/components/text-animation/text-animations";
 import { showError } from "@/lib/showError";
+import { useAuth } from "@/contexts/authContext";
 
 export function AuthPage() {
   const [loginBox, setLoginBox] = useState<boolean>(true);
@@ -43,8 +43,7 @@ export function AuthPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [oauthLoading, setOauthLoading] = useState<boolean>(false);
   const navigate = useNavigate();
-  const setState = useUserStore((state) => state.setState);
-
+  const { setUser } = useAuth();
   const handleSubmit = async () => {
     if (data.role === UserRole.NORMAL && !loginBox) {
       toast.warning("Please select a role");
@@ -66,8 +65,8 @@ export function AuthPage() {
     setLoading(true);
     try {
       if (loginBox) {
-        const userData: AuthDataType = await LoginUser(data);
-        setState(userData);
+        const userData: User = await LoginUser(data);
+        setUser(userData);
         const isAdmin = userData.role === UserRole.ADMIN;
         toast.success("Login successful! Redirecting to profile...");
         if (isAdmin) {
@@ -77,8 +76,8 @@ export function AuthPage() {
         }
         navigate(`/profile`);
       } else {
-        const userData: AuthDataType = await RegisterUser(data);
-        setState(userData);
+        const userData: User = await RegisterUser(data);
+        setUser(userData);
         const isAdmin = userData.role === UserRole.ADMIN;
         toast.success("Login successful! Redirecting to profile...");
         if (isAdmin) {
@@ -95,24 +94,12 @@ export function AuthPage() {
     setLoading(false);
   };
 
-  const handleOauthWindow = async () => {
+  const handleOauthWindow = () => {
     if (data.role === UserRole.NORMAL && !loginBox) {
       toast.warning("Please select a role");
       return;
     }
-    setOauthLoading(true);
-    try {
-      const data: { url: string } = await getOauthWindow();
-      if (!data || !data.url) {
-        toast.error("Failed to get OAuth URL. Please try again later.");
-        return;
-      }
-      window.location.href = data.url;
-    } catch (error) {
-      console.error("Error during OAuth window handling:", error);
-      showError(error, "Failed to open OAuth window. Please try again.");
-    }
-    setOauthLoading(false);
+    window.location.href = `${baseUrl}/auth/google`;
   };
 
   return (
@@ -182,20 +169,25 @@ export function AuthPage() {
             <br />
             <form>
               <div className="flex flex-col gap-6">
-                <div className="grid gap-2">
-                  <Label htmlFor="fullName">Full Name</Label>
-                  <Input
-                    id="fullName"
-                    type="text"
-                    disabled={loading}
-                    value={data.fullName}
-                    onChange={(e) =>
-                      setData((prev) => ({ ...prev, fullName: e.target.value }))
-                    }
-                    placeholder="Enter your full name"
-                    required
-                  />
-                </div>
+                {!loginBox && (
+                  <div className="grid gap-2">
+                    <Label htmlFor="fullName">Full Name</Label>
+                    <Input
+                      id="fullName"
+                      type="text"
+                      disabled={loading}
+                      value={data.fullName}
+                      onChange={(e) =>
+                        setData((prev) => ({
+                          ...prev,
+                          fullName: e.target.value,
+                        }))
+                      }
+                      placeholder="Enter your full name"
+                      required
+                    />
+                  </div>
+                )}
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
                   <Input

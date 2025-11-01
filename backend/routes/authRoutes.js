@@ -25,7 +25,7 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "https://gatequest.netlify.app/auth.html",
+    failureRedirect: "http://localhost:5173/login",
   }),
   (req, res) => {
     // 1. Create the token
@@ -45,9 +45,10 @@ router.get(
     const userQuery = encodeURIComponent(JSON.stringify(user)); // 4. Redirect with BOTH token and user in the query
 
     res.redirect(
-      `https://gatequest.netlify.app/auth.html?token=${token}&user=${userQuery}`
+      `http://localhost:5173/dashboard?token=${token}&user=${userQuery}`
     );
   }
 );
+
 
 export default router;
