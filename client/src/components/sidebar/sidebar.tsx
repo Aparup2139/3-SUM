@@ -1,4 +1,4 @@
-import { Bell, LogOutIcon, MessageCircle, StickyNote, UserRoundPen, } from "lucide-react"
+import { Album, Bell, HelpCircle, HelpCircleIcon, House, LogOutIcon, MessageCircle, StickyNote, UserRoundPen, } from "lucide-react"
 import { useEffect, useState, type ReactNode } from "react"
 import logoImage from "/favicon.png"
 import { useLocation, useNavigate } from "react-router-dom"
@@ -24,12 +24,12 @@ export const Sidebar = () => {
         if (mobileView) {
             setUppersidebarItems([
                 {
-                    text: "Tasks",
-                    icon: <StickyNote size={ICON_SIZE} />
+                    text: "home",
+                    icon: <House size={ICON_SIZE} />
                 },
                 {
-                    text: "Messages",
-                    icon: <MessageCircle size={ICON_SIZE} />
+                    text: "bookings",
+                    icon: <Album size={ICON_SIZE} />
                 },
                 {
                     text: "Profile",
@@ -40,8 +40,8 @@ export const Sidebar = () => {
 
                 },
                 {
-                    text: "Notifications",
-                    icon: <Bell size={ICON_SIZE} />
+                    text: "help",
+                    icon: <HelpCircleIcon size={ICON_SIZE} />
                 },
                 {
                     text: "Logout",
@@ -52,24 +52,29 @@ export const Sidebar = () => {
         else {
             setUppersidebarItems([
                 {
-                    text: "Tubespace",
-                    icon: <img src={logoImage} className={`h-${logoSize} aspect-square`} />
+                    text: "",
+                    icon: <svg width="26" height="40" viewBox="0 0 56 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M43 0C50.1797 6.44277e-07 56 5.8203 56 13C56 20.1797 50.1797 26 43 26H34.4844L48.4844 40H31.5156L15.7578 24.2422C14.672 23.1564 14 21.6569 14 20C14 16.6863 16.6863 14 20 14H43C43.5523 14 44 13.5523 44 13C44 12.4477 43.5523 12 43 12H20C15.5817 12 12 15.5817 12 20C12 22.3901 13.0482 24.5347 14.71 26H14.6875L28.6875 40H20C8.95431 40 0 31.0457 0 20C0 8.95431 8.9543 0 20 0H43Z" fill="#3902FF"></path>
+                        <path d="M56 28V40H51.3125L39.3125 28H56Z" fill="#3902FF"></path>
+                    </svg>
+                },
+                {
+                    text: "home",
+                    icon: <House size={ICON_SIZE} />
                 },
                 {
                     text: "Profile",
                     icon: <UserRoundPen size={ICON_SIZE} />
                 },
+
+
                 {
-                    text: "Tasks",
-                    icon: <StickyNote size={ICON_SIZE} />
+                    text: "bookings",
+                    icon: <Album size={ICON_SIZE} />
                 },
                 {
-                    text: "Messages",
-                    icon: <MessageCircle size={ICON_SIZE} />
-                },
-                {
-                    text: "Notifications",
-                    icon: <Bell size={ICON_SIZE} />
+                    text: "help",
+                    icon: <HelpCircleIcon size={ICON_SIZE} />
                 },
                 {
                     text: "Logout",
@@ -105,7 +110,7 @@ export const Sidebar = () => {
     }, []);
 
 
-    return (<nav className={`flex  ${mobileView ? "sm:px-1  rounded-tr-2xl rounded-tl-2xl sm:pt-4 w-screen h-[10vh] flex-row" : "h-full  rounded-br-2xl  rounded-tr-2xl  w-fit pb-2 pt-1 px-4 flex-col xl:px-6"} 
+    return (<nav className={`flex  ${mobileView ? "sm:px-1  rounded-tr-2xl rounded-tl-2xl sm:pt-4 w-screen h-[10vh] flex-row" : "h-full w-72 pb-2 pt-1 px-4 flex-col xl:px-6"} 
        border border-sidebar-border 
     justify-between bg-popover text-popover-foreground`} >
         <ul className={`flex ${mobileView ? "flex-row items-center w-full" : "flex-col"} justify-center gap-4 p-2`} >
@@ -123,8 +128,8 @@ const NavItem = ({ mobileView, text, icon }: { mobileView: boolean, text: string
     const navRoute = useLocation().pathname.split('/');
     const navigation = useNavigate()
     const username = useUserStore((state) => state.user.name);
-    const role = useUserStore((state) => state.user.role);
-    
+
+
     let selected = false;
     if (text.toLowerCase() === "profile" && navRoute.length === 4) {
         selected = true;
@@ -135,7 +140,7 @@ const NavItem = ({ mobileView, text, icon }: { mobileView: boolean, text: string
 
     const handleNavigate = () => {
         if (!username) return;
-        navigation("/"+text.toLowerCase())
+        navigation("/" + text.toLowerCase())
     }
 
     const JSX = <span

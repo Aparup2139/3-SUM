@@ -244,7 +244,7 @@ export const LeftContent = () => {
     }
 
     return (
-        <div className="h-full w-full flex flex-col justify-center items-center bg-white">
+        <div className="h-full w-full flex flex-col justify-center items-center">
             <div className="w-full">
                 <div className="flex relative h-12 sm:h-10 w-full items-center text-xs sm:text-sm">
                     <Tab text="Upcoming Events" isActive={activeTab === 1} onClick={() => setActiveTab(1)} />
