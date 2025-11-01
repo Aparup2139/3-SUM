@@ -119,14 +119,14 @@ const deleteUser= async (req,res)=>{
       res.status(500).json({ message: "Server error" });
   }
 };
-const updateprofilepicture= async (req,res)=>{
+const updateprofile= async (req,res)=>{
   try {
     const id=req.user._id||req.user.id; 
-    const { profileImage } = req.body;
+    const { profileImage,fullName,email } = req.body;
     if(!id){
       return res.status(400).json({ message: "User ID is required" });
     }
-      const user = await User.findByIdAndUpdate(id, { profileImage }, { new: true });
+      const user = await User.findByIdAndUpdate(id, { profileImage,fullName,email }, { new: true });
       if (!user) {
           return res.status(404).json({ message: "User not found" });
       }
@@ -137,4 +137,4 @@ const updateprofilepicture= async (req,res)=>{
   } 
 };
 
-export { logout, deleteUser, profile,updateprofilepicture };
+export { logout, deleteUser, profile,updateprofile };
