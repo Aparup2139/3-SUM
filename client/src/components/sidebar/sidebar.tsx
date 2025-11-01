@@ -1,12 +1,9 @@
-import { Album, Bell, HelpCircle, HelpCircleIcon, House, LogOutIcon, MessageCircle, StickyNote, UserRoundPen, } from "lucide-react"
+import { Album, HelpCircleIcon, House, LogOutIcon, UserRoundPen, } from "lucide-react"
 import { useEffect, useState, type ReactNode } from "react"
-import logoImage from "/favicon.png"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useScreenSizeStore } from "@/store/screenSizestate.store"
 import { LogoutBox } from "../dialogbox/logout"
 import { useUserStore } from "@/store/user.store"
-import { Skeleton } from "../ui/skeleton"
-import { UserRole } from "@/types/types"
 import { fallback_profileImg } from "@/constast"
 
 interface SidebarItem {
@@ -107,7 +104,7 @@ export const Sidebar = () => {
         handleResize()
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
-    }, []);
+    }, [changeMobileView]);
 
 
     return (<nav className={`flex  ${mobileView ? "sm:px-1  rounded-tr-2xl rounded-tl-2xl sm:pt-4 w-screen h-[10vh] flex-row" : "h-full w-72 pb-2 pt-1 px-4 flex-col xl:px-6"} 
@@ -160,9 +157,9 @@ const NavItem = ({ mobileView, text, icon }: { mobileView: boolean, text: string
         className={`${selected && username ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border"
             : "border-transparent text-foreground"} items-center border rounded-sm flex py-2 cursor-pointer ${text === "Tubespace" ?
                 `mb-6 gap-2 ${!mobileView ? "pl-3 pr-2" : ""}` : `gap-4 ${mobileView ? "px-2" : "px-5"} hover:border-sidebar-border `}" `} >
-       
-        {(username || text.toLowerCase() === "tubespace") && <span>{icon}</span>}
-        {(username || text.toLowerCase() === "tubespace") && !mobileView && <h2 className={`${text === "Tubespace" && "mt-1 ml-1"}`} >{text}</h2>}
+
+        <span>{icon}</span>
+        <h2 className={`${text === "Tubespace" && "mt-1 ml-1"}`} >{text}</h2>
 
     </span>)
 }
