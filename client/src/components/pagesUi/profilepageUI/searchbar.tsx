@@ -44,17 +44,13 @@ export function CommandDialogDemo({ open, setOpen }: { open: boolean, setOpen: (
     const timer = useRef<NodeJS.Timeout | null>(null)
     const [query, setQuery] = useState("")
     const [debouncedQuery, setDebouncedQuery] = useState("")
-    const { data: users, isLoading, error } = useQuery<userSearchType[]>({
-        queryKey: ["search-users", debouncedQuery],
+    const { data: users, isLoading } = useQuery<userSearchType[]>({
+        queryKey: ["fetchEvents?category=tech&userQuery=hackathon", debouncedQuery],
         queryFn: () => searchUsers(debouncedQuery),
         enabled: open,
         refetchOnWindowFocus: false,
     })
 
-    if (error) {
-        console.log("Error fetching users:", error)
-        toast.error(error.message || "Failed to fetch users.")
-    }
 
     useEffect(() => {
         if (timer.current)
@@ -99,7 +95,7 @@ export function CommandDialogDemo({ open, setOpen }: { open: boolean, setOpen: (
                                     className="relative"
                                     onSelect={() => {
                                         setOpen(false)
-                                        window.location.href = `/${user.role === "YOUTUBER" ? "y" : "c"}/profile/${user.name}`
+                                        window.location.href = `/home/event/121`
                                     }}
                                 >
                                     <img

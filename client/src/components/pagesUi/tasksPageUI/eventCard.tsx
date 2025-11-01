@@ -2,10 +2,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Calendar, MapPin, Users, Clock } from 'lucide-react';
+import { Calendar, MapPin, Users, Clock, EditIcon, Sparkle, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useOpenTaskUpdate } from '@/store/updateTaskSheet';
 
 interface EventCardProps {
+  admin?: boolean,
   id?: string;
   title?: string;
   short_description?: string;
@@ -25,6 +27,7 @@ interface EventCardProps {
 }
 
 export default function EventCard({
+  admin = false,
   id,
   title = "Tech Innovators Summit 2025",
   short_description = "A premier event showcasing future technology trends.",
@@ -46,12 +49,14 @@ export default function EventCard({
       year: 'numeric'
     }).format(date);
   };
-
+  console.log("admin:", admin)
   console.log("title:", title)
   const navigate = useNavigate();
   const ticketsAvailable = totalTickets - ticketsSold;
   const soldPercentage = ((ticketsSold / totalTickets) * 100).toFixed(1);
   const availabilityStatus = ticketsAvailable > 100 ? "Available" : ticketsAvailable > 0 ? "Limited" : "Sold Out";
+  const setTaskId = useOpenTaskUpdate((state) => state.setTaskId);
+
 
   if (loading) {
     return (
@@ -76,7 +81,14 @@ export default function EventCard({
 
   return (
     <Card
-      onClick={() => navigate("/home/event/" + id)}
+      onClick={() => {
+        if (!admin) {
+          navigate("/home/event/" + id)
+        }
+      }
+
+
+      }
       className="overflow-x border-slate-800 bg-slate-900/60 backdrop-blur w-full max-w-3xl shadow-md hover:shadow-lg transition-all duration-300">
       <div className="relative h-48 overflow-hidden">
         <img
@@ -129,15 +141,29 @@ export default function EventCard({
             <p className="text-lg font-bold text-white">₹{currentPrice.toLocaleString()}</p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" className="border-slate-700 text-slate-300 hover:bg-slate-800">
-              Learn More
-            </Button>
-            <Button
-              disabled={ticketsAvailable === 0}
+            {admin ? <Button variant="outline" className="
+             bg-gradient-to-r from-purple-700 via-pink-700 to-orange-700
+            text-primary border-background hover:bg-slate-800">
+              <Sparkles /> Get Analytics
+            </Button> :
+
+              <Button variant="outline" className="border-slate-700 text-slate-300 hover:bg-slate-800">
+                Learn More
+              </Button>}
+            {admin ? <Button
+              onClick={() => {
+                setTaskId(id as string)
+              }}
               className="bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white border-0 disabled:opacity-50"
             >
-              {ticketsAvailable === 0 ? 'Sold Out' : 'Book Tickets'}
-            </Button>
+              <EditIcon /> Edit Event
+            </Button> :
+              <Button
+                disabled={ticketsAvailable === 0}
+                className="bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white border-0 disabled:opacity-50"
+              >
+                {ticketsAvailable === 0 ? 'Sold Out' : 'Book Tickets'}
+              </Button>}
           </div>
         </div>
       </CardContent>

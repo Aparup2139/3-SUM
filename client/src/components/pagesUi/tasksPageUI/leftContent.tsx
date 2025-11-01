@@ -214,9 +214,8 @@ const sampleEvents = [
 ];
 
 
-export const LeftContent = () => {
-    const role = useUserStore((state) => state.user.role)
-    const id = useUserStore((state) => state.user.id)
+export const LeftContent = ({ admin = false }) => {
+
     const [activeTab, setActiveTab] = useState<number>(1)
     const isLoading = false
 
@@ -240,7 +239,7 @@ export const LeftContent = () => {
         if (isLoading) return Array.from({ length: 3 }).map((_, i) => <EventCard key={i} loading />)
 
         if (events.length === 0) return renderEmptyState(label)
-        return events.map((event) => <EventCard key={event.id} {...event} />)
+        return events.map((event) => <EventCard admin={admin} key={event.id} {...event} />)
     }
 
     return (

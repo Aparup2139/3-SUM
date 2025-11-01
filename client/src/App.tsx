@@ -11,6 +11,7 @@ import { OAuthPage } from './components/pagesUi/authPage/OAuthPage'
 import { EventCityPage } from './pages/EventCityPage'
 import { SpecificEventPage } from './pages/SpecificEventPage'
 import ProfilePage from './pages/profilePage'
+import { AdminPanelPage } from './components/pagesUi/AdminPanel/adminPanel'
 const router = createBrowserRouter([
 
   {
@@ -73,7 +74,14 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin-panel",
-    element: <div> Admin panel </div>
+    element: <AdminPanelPage />,
+    children: [
+      {
+        index: true,
+        element: <AdminPanelPage />
+      },
+      
+    ]
   }
 ])
 
