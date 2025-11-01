@@ -37,7 +37,7 @@ export const PageWrapper = ({ HeaderJSX = <></>, HeaderIcon = <></>, leftContent
     </section>)
 }
 
-export const PageWrapper2 = ({ HeaderJSX = <></>, HeaderIcon = <></>, leftContent, rightContent, headerText, }:
+export const PageWrapper2 = ({ HeaderJSX = <></>, HeaderIcon = <></>, leftContent, headerText, }:
     { HeaderJSX?: ReactNode, HeaderIcon?: ReactNode, rightContent: ReactNode, leftContent: ReactNode, headerText: string }) => {
 
     const { mobileView } = useScreenSizeStore()

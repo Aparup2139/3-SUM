@@ -15,12 +15,9 @@
 
 import { useUserStore } from "@/store/user.store"
 
-import { UserRole, type TopEditorsData } from "@/types/types";
+import { UserRole } from "@/types/types";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useQuery } from "@tanstack/react-query";
-import { getTopEditors, getTopYoutubers } from "@/httpfnc/user";
-import { useCallback } from "react";
-import { toast } from "sonner";
+// import { useCallback } from "react";
 import { TrendingEventCard } from "../profilepageUI/trendingEventCard";
 
 
@@ -211,9 +208,9 @@ const sampleEvents = [
 
 export const RightContent = () => {
     const role = useUserStore((state) => state.user.role);
-    const fetchFnc = useCallback(() => {
-        //getHotEvents
-    }, [role])
+    // const fetchFnc = useCallback(() => {
+    //     //getHotEvents
+    // }, [role])
 
     // const { data, isLoading, error } = useQuery<TopEditorsData[]>({
     //     queryKey: ["top-editors", role],

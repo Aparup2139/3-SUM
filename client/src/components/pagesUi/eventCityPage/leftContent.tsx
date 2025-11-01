@@ -2,25 +2,8 @@ import { useState } from "react"
 import { Separator } from "@/components/ui/separator"
 import { motion } from "framer-motion"
 import { BrushCleaning } from "lucide-react"
-import { useUserStore } from "@/store/user.store"
 import EventCard from "../tasksPageUI/eventCard"
 import { useParams } from "react-router-dom"
-
-
-export const cityArray = [
-    "Bangalore",
-    "Mumbai",
-    "Delhi",
-    "Hyderabad",
-    "Chennai",
-    "Pune",
-    "Kolkata",
-    "Goa",
-    "Ahmedabad",
-    "Jaipur"
-];
-
-
 
 const sampleEvents = [
     {
@@ -217,8 +200,6 @@ const sampleEvents = [
 
 
 export const LeftContent = () => {
-    const role = useUserStore((state) => state.user.role)
-    const id = useUserStore((state) => state.user.id)
     const [activeTab, setActiveTab] = useState<number>(1)
     const isLoading = false
     const { cityName } = useParams();
@@ -322,12 +303,12 @@ import {
     Castle,
     Trees,
     Mountain,
-    MapPin,
     BuildingIcon,
     Waves,
     Factory,
 } from "lucide-react"
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const cityMeta = [
     {
         city: "Bangalore",

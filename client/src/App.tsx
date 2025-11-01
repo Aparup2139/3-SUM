@@ -1,6 +1,6 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { RootLayout } from './pages/rootlayout'
-import { HomePage } from './pages/taskPage'
+import { HomePage } from './pages/HomePage'
 import { NotificationPage } from './pages/notificationPage'
 import { BookingsPage } from './pages/bookingsPage'
 import { AuthPage } from './components/pagesUi/authPage/authPage'

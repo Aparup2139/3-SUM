@@ -13,6 +13,15 @@ const BookingSchema = new mongoose.Schema({
         ref: 'Event',
         required: true
     },
+    age: {
+        type: String,
+        required: true
+    },
+    gender: {
+        type: String,
+        enum: ['male', 'female', 'other'],
+        required: true
+    },
     ticketCount: {
         type: Number,
         required: true,
