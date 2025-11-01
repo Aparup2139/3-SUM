@@ -5,6 +5,10 @@ import bcrypt from "bcryptjs";
 const userSchema = new mongoose.Schema(
     {
         fullName: { type: String, required: true },
+        profileImage: { 
+            type: String, 
+            default: 'default-user.png' // You can set a default image path/URL here
+        },
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
         // New field for role-based access control

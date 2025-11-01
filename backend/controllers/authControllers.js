@@ -80,3 +80,59 @@ export const getUserInfo = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+const profile= async (req,res)=>{
+  try {
+    const id=req.user._id||req.user.id;
+    if(!id){
+      return res.status(400).json({ message: "User ID is required" });
+    }
+      const user = await User.findById(id);
+      if (!user) {
+          return res.status(404).json({ message: "User not found" });
+      }
+      res.status(200).json({user,msg:"User profile fetched successfully"});
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
+  } 
+};
+
+const logout= async (req,res)=>{
+  // Since JWT is stateless, logout can be handled on the client side by deleting the token.
+  res.status(200).json({message:"User logged out successfully"});
+}
+const deleteUser= async (req,res)=>{
+  try {
+    const id=req.user._id||req.user.id; 
+    if(!id){
+      return res.status(400).json({ message: "User ID is required" });
+    }
+      const user = await User.findByIdAndDelete(id);
+      if (!user) {
+          return res.status(404).json({ message: "User not found" });
+      }
+      res.status(200).json({message:"User deleted successfully"});
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
+  }
+};
+const updateprofilepicture= async (req,res)=>{
+  try {
+    const id=req.user._id||req.user.id; 
+    const { profileImage } = req.body;
+    if(!id){
+      return res.status(400).json({ message: "User ID is required" });
+    }
+      const user = await User.findByIdAndUpdate(id, { profileImage }, { new: true });
+      if (!user) {
+          return res.status(404).json({ message: "User not found" });
+      }
+      res.status(200).json({user,msg:"Profile picture updated successfully"});
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
+  } 
+};
+
+export { logout, deleteUser, profile,updateprofilepicture };

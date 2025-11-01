@@ -2,12 +2,17 @@ import passport from "passport";
 import express from "express";
 import jwt from "jsonwebtoken";
 import { registerUser, loginUser } from "../controllers/authControllers.js";
-
+import { logout,deleteUser, profile,updateprofilepicture } from "../controllers/authControllers.js";
 const router = express.Router();
+import { protect } from "../middleware/authMiddleware.js";
 
 // Existing imports for registerUser and loginUser
 router.post("/register", registerUser);
 router.post("/login", loginUser);
+router.put("/profilepicture", protect, updateprofilepicture);
+router.get("/logout", logout);
+router.delete("/delete", deleteUser);
+router.get("/me", protect,profile);
 
 // ✅ Google Auth route
 router.get(

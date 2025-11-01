@@ -18,6 +18,7 @@ export const protect = async (req, res, next) => {
             req.user = await User.findById(decoded.id).select('-password');
             
             if (!req.user) {
+                console.error('User not found for the provided token');
                 return res.status(401).json({ message: 'Not authorized, user not found' });
             }
                
@@ -29,6 +30,7 @@ export const protect = async (req, res, next) => {
     }
 
     if (!token) {
+        console.log('No token provided in request headers');
         return res.status(401).json({ message: 'Not authorized, no token' });
     }
 };

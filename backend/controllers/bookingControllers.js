@@ -8,7 +8,8 @@ import * as bookingService from '../services/bookingService.js';
 export const createOrder = asyncHandler(async (req, res) => {
     // req.user is populated by 'protect' middleware
     const user= req.user._id||req.user.id; 
-    const { event, ticketCount, totalAmount} = req.body;
+    const event = req.params.id;
+    const { ticketCount, totalAmount} = req.body;
 
     // Note: Validation (max 5 tickets) is handled by middleware, but a final check here is good practice.
     if (!event || !ticketCount || !totalAmount) {

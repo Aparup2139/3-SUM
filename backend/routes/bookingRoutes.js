@@ -10,7 +10,7 @@ const router = express.Router();
 // 'validateTicketCount': Checks if ticketCount <= 5 (Fraud Prevention).
 
 // 1. Initiate Order (Protected & Validated)
-router.post('/create-order', protect, validateTicketCount, createOrder);
+router.post('/create-order/:id', protect,validateTicketCount, createOrder);
 
 // 2. Razorpay Webhook (Public, relies on signature verification inside the controller)
 // Note: This endpoint must match the URL configured in your Razorpay dashboard.
