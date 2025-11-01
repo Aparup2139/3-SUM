@@ -18,7 +18,9 @@ export const RootLayout: React.FC = () => {
       <Sidebar />
       <Outlet />
       {isAiModalOpen && <AIChatModal setIsAiModalOpen={setIsAiModalOpen} />}
-      {!isAiModalOpen && <FloatingAIButton setIsAiModalOpen={setIsAiModalOpen} />}
+      {!isAiModalOpen && (
+        <FloatingAIButton setIsAiModalOpen={setIsAiModalOpen} />
+      )}
       <Toaster closeButton richColors position="top-center" />
     </main>
   );
