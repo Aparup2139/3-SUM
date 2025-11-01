@@ -1,16 +1,28 @@
-// src/config/db.js
-import mongoose from 'mongoose';
+// backend/config/db.js
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 
-export const connectDB = async () => {
-    try {
-        const conn = await mongoose.connect(process.env.MONGO_URI, {
-            // Options to avoid deprecation warnings (Mongoose 6+)
-            // useNewUrlParser: true, 
-            // useUnifiedTopology: true,
-        });
-        console.log(`MongoDB Connected: ${conn.connection.host}`);
-    } catch (error) {
-        console.error(`Error: ${error.message}`);
-        process.exit(1); // Exit process with failure
-    }
+dotenv.config();
+
+const connectDB = async () => {
+  const uri = process.env.MONGO_URI;
+console.log("Mongo URI:", uri);
+  if (!uri) {
+    console.error("❌ MONGO_URI not found in environment variables");
+    process.exit(1);
+  }
+
+  try {
+    const conn = await mongoose.connect(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+
+    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error(`❌ MongoDB Connection Error: ${error.message}`);
+    process.exit(1);
+  }
 };
+
+export default connectDB;
