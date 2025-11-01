@@ -9,7 +9,6 @@ const EventSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    // Reference to the User who created the event
     organizer: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -23,10 +22,14 @@ const EventSchema = new mongoose.Schema({
         type: String
     },
     city: {
-        type: String
+        type: String,
+        // Added index for efficient filtering by city
+        index: true 
     },
     category: {
         type: String, // e.g., 'Tech', 'Music', 'Arts'
+        // Added index for efficient filtering by category
+        index: true 
     },
     totalTickets: {
         type: Number,
@@ -52,9 +55,15 @@ const EventSchema = new mongoose.Schema({
     },
     currentPrice: {
         type: Number,
-        required: true // Should be updated by a separate service/cron job
+        required: true
     },
-   
+    // CRUCIAL: Only show published events publicly
+    isPublished: { 
+        type: Boolean,
+        default: false,
+        index: true
+    },
+    
     createdAt: {
         type: Date,
         default: Date.now

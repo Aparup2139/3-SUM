@@ -1,6 +1,6 @@
 // src/routes/bookingRoutes.js
 import express from 'express';
-import { createOrder, handleWebhook, getMyBookings } from '../controllers/bookingControllers.js';
+import { createOrder, handleWebhook, getMyBookings, getQrCode } from '../controllers/bookingControllers.js';
 import { protect, validateTicketCount } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
