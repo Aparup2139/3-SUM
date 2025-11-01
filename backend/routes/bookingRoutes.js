@@ -2,7 +2,7 @@
 import express from 'express';
 import { createOrder, handleWebhook, getMyBookings } from '../controllers/bookingControllers.js';
 import { protect, validateTicketCount } from '../middleware/authMiddleware.js';
-
+import { getQrCode } from '../controllers/bookingControllers.js';
 const router = express.Router();
 
 // Middleware Dependencies:
@@ -18,6 +18,9 @@ router.post('/razorpay-webhook', handleWebhook);
 
 // 3. User Booking History
 router.get('/my-tickets', protect, getMyBookings);
+
+// 4. Get QR Code URL for a specific booking
+router.get('/qr/:bookingId', protect, getQrCode); 
 
 export default router;
 
