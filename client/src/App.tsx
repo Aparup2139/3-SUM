@@ -10,7 +10,6 @@ import { OAuthPage } from './components/pagesUi/authPage/OAuthPage'
 import { EventCityPage } from './pages/EventCityPage'
 import { SpecificEventPage } from './pages/SpecificEventPage'
 import ProfilePage from './pages/profilePage'
-import Bookings from './components/bookings/bookings'
 const router = createBrowserRouter([
 
   {
@@ -63,7 +62,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/bookings",
-        element: <Bookings />
+        element: <div> Bookings </div>
       },
       {
         path: "/help",

@@ -1,21 +1,26 @@
-import React, { useState } from 'react';
-import { Sparkles, X, Send, Zap } from 'lucide-react';
-
-export const FloatingAIButton = ({ setIsAiModalOpen }: { setIsAiModalOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
+import React, { useState } from "react";
+import { Sparkles, X, Send, Zap } from "lucide-react";
+import TextareaAutosize from "react-textarea-autosize";
+export const FloatingAIButton = ({
+  setIsAiModalOpen,
+}: {
+  setIsAiModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   return (
     <button
       onClick={() => setIsAiModalOpen(true)}
-      className="fixed right-8 bottom-8 z-50 group"
+      className="fixed right-8 bottom-8 z-50 group cursor-pointer"
     >
       <div className="relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 rounded-full blur-lg opacity-75 group-hover:opacity-100 animate-pulse"></div>
-        
-        <div className="relative bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 p-4 rounded-full shadow-2xl transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 rounded-full blur-lg opacity-75 group-hover:opacity-100 animate-pulse"></div>
+        <div className="relative bg-gradient-to-r from-orange-600 via-pink-600 to-purple-600 p-4 rounded-full shadow-2xl transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
           <Sparkles className="text-white" size={28} strokeWidth={2.5} />
         </div>
-        
         <div className="absolute top-0 right-0 w-2 h-2 bg-yellow-400 rounded-full animate-ping"></div>
-        <div className="absolute bottom-0 left-0 w-2 h-2 bg-blue-400 rounded-full animate-ping" style={{ animationDelay: '0.5s' }}></div>
+        <div
+          className="absolute bottom-0 left-0 w-2 h-2 bg-blue-400 rounded-full animate-ping"
+          style={{ animationDelay: "0.5s" }}
+        ></div>
       </div>
     </button>
   );
@@ -26,29 +31,28 @@ const AIChatModal = ({
 }: {
   setIsAiModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: 'Hello! I\'m your AI assistant. How can I help you today?' }
+    {
+      role: "assistant",
+      content: "Hello! I'm your AI assistant. How can I help you today?",
+    },
   ]);
 
   const handleSend = () => {
     if (message.trim()) {
-      setMessages([...messages, { role: 'user', content: message }]);
-      setMessage('');
-      
-      setTimeout(() => {
-        setMessages(prev => [...prev, { 
-          role: 'assistant', 
-          content: 'I\'m here to help! This is a demo response.' 
-        }]);
-      }, 1000);
-    }
-  };
+      setMessages([...messages, { role: "user", content: message }]);
+      setMessage("");
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
+      setTimeout(() => {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: "I'm here to help! This is a demo response.",
+          },
+        ]);
+      }, 1000);
     }
   };
 
@@ -64,7 +68,9 @@ const AIChatModal = ({
               </div>
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-foreground">AI Assistant</h2>
+              <h2 className="text-lg font-semibold text-foreground">
+                AI Assistant
+              </h2>
               <p className="text-xs text-muted-foreground">Powered by AI</p>
             </div>
           </div>
@@ -80,13 +86,15 @@ const AIChatModal = ({
           {messages.map((msg, index) => (
             <div
               key={index}
-              className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              className={`flex ${
+                msg.role === "user" ? "justify-end" : "justify-start"
+              }`}
             >
               <div
                 className={`max-w-[80%] rounded-lg p-3 ${
-                  msg.role === 'user'
-                    ? 'bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 text-white'
-                    : 'bg-foreground/5 text-foreground border border-foreground/10'
+                  msg.role === "user"
+                    ? "bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 text-white"
+                    : "bg-foreground/5 text-foreground border border-foreground/10"
                 }`}
               >
                 <p className="text-sm">{msg.content}</p>
@@ -96,25 +104,33 @@ const AIChatModal = ({
         </div>
 
         <div className="p-4 border-t border-foreground/10 bg-background">
-          <div className="flex gap-2">
-            <input
-              type="text"
+          <div className="flex items-end gap-2 bg-foreground/5 border border-foreground/10 rounded-xl px-3 py-2 focus-within:border-primary/70 transition-all">
+            <TextareaAutosize
+              minRows={1}
+              maxRows={8}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSend();
+                }
+              }}
               placeholder="Type your message..."
-              className="flex-1 bg-foreground/5 rounded-md px-4 py-2.5 text-sm text-foreground border border-foreground/10 focus:border-primary focus:outline-none transition-colors placeholder:text-muted-foreground"
+              className="flex-1 resize-none bg-transparent outline-none text-sm text-white placeholder-neutral-500 py-1"
             />
+
             <button
               onClick={handleSend}
               disabled={!message.trim()}
-              className="bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 hover:from-purple-700 hover:via-pink-700 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-2.5 rounded-md transition-all transform hover:scale-105 disabled:hover:scale-100"
+              className="p-2 rounded-lg bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 disabled:opacity-50 disabled:cursor-not-allowed hover:from-purple-700 hover:via-pink-700 hover:to-orange-700 transition-transform hover:scale-110"
             >
-              <Send size={18} />
+              <Send size={18} className="text-white" />
             </button>
           </div>
+
           <p className="text-xs text-muted-foreground mt-2 text-center">
-            Press Enter to send, Shift+Enter for new line
+            Press <b>Enter</b> to send, <b>Shift+Enter</b> for new line
           </p>
         </div>
       </div>
