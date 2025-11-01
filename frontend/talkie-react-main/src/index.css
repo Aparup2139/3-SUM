@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 240 20% 8%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 18% 12%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 18% 12%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 280 85% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 200 90% 50%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 240 15% 20%;
+    --muted-foreground: 240 5% 65%;
+
+    --accent: 320 90% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 15% 18%;
+    --input: 240 15% 18%;
+    --ring: 280 85% 60%;
+
+    --radius: 1.2rem;
+
+    --chat-user-bg: 280 85% 60%;
+    --chat-user-text: 0 0% 100%;
+    --chat-assistant-bg: 240 18% 15%;
+    --chat-assistant-text: 0 0% 98%;
+    --chat-input-bg: 240 18% 12%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(280 85% 60%), hsl(320 90% 55%));
+    --gradient-secondary: linear-gradient(135deg, hsl(200 90% 50%), hsl(180 85% 55%));
+    --gradient-accent: linear-gradient(135deg, hsl(320 90% 55%), hsl(340 85% 60%));
+    --gradient-chat: linear-gradient(180deg, hsl(240 20% 10%), hsl(240 22% 8%));
+    --gradient-neon: linear-gradient(90deg, hsl(280 85% 60%), hsl(200 90% 50%), hsl(320 90% 55%));
+    
+    --shadow-glow-sm: 0 0 10px hsl(280 85% 60% / 0.3);
+    --shadow-glow-md: 0 0 20px hsl(280 85% 60% / 0.4), 0 0 40px hsl(280 85% 60% / 0.2);
+    --shadow-glow-lg: 0 0 30px hsl(280 85% 60% / 0.5), 0 0 60px hsl(280 85% 60% / 0.3), 0 0 90px hsl(280 85% 60% / 0.1);
+    --shadow-3d: 0 10px 30px hsl(240 20% 5% / 0.5), 0 5px 15px hsl(280 85% 60% / 0.2);
+  }
+
+  .dark {
+    --background: 240 20% 8%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 18% 12%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 18% 12%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 280 85% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 200 90% 50%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 240 15% 20%;
+    --muted-foreground: 240 5% 65%;
+
+    --accent: 320 90% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 15% 18%;
+    --input: 240 15% 18%;
+    --ring: 280 85% 60%;
+    
+    --chat-user-bg: 280 85% 60%;
+    --chat-user-text: 0 0% 100%;
+    --chat-assistant-bg: 240 18% 15%;
+    --chat-assistant-text: 0 0% 98%;
+    --chat-input-bg: 240 18% 12%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(280 85% 60%), hsl(320 90% 55%));
+    --gradient-secondary: linear-gradient(135deg, hsl(200 90% 50%), hsl(180 85% 55%));
+    --gradient-accent: linear-gradient(135deg, hsl(320 90% 55%), hsl(340 85% 60%));
+    --gradient-chat: linear-gradient(180deg, hsl(240 20% 10%), hsl(240 22% 8%));
+    --gradient-neon: linear-gradient(90deg, hsl(280 85% 60%), hsl(200 90% 50%), hsl(320 90% 55%));
+    
+    --shadow-glow-sm: 0 0 10px hsl(280 85% 60% / 0.3);
+    --shadow-glow-md: 0 0 20px hsl(280 85% 60% / 0.4), 0 0 40px hsl(280 85% 60% / 0.2);
+    --shadow-glow-lg: 0 0 30px hsl(280 85% 60% / 0.5), 0 0 60px hsl(280 85% 60% / 0.3), 0 0 90px hsl(280 85% 60% / 0.1);
+    --shadow-3d: 0 10px 30px hsl(240 20% 5% / 0.5), 0 5px 15px hsl(280 85% 60% / 0.2);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}

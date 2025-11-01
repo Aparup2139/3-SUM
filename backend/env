@@ -1,0 +1,8 @@
+MONGO_URI=mongodb+srv://aparupghosh85:sunny2139@cluster0.8ncjy.mongodb.net/?appName=hacksprint
+SESSION_SECRET=8aa43b7969a815c7ad6afdbf6a6d49bebdf932196097a57721097881fa2ace5f
+GOOGLE_CLIENT_ID=976624977999-cuivrt3rbm7ufhbv9ao3ibaliqhhiuma.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=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
+GOOGLE_CALLBACK_URL=https://localhost:5000/api/v1/auth/google/callback
+JWT_SECRET=b4bb532cf4b72245327c089e6981cc7efa779f199bae71ac4c8b7f82a8570eb6
+HF_ACCESS_TOKEN=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
+HF_MODEL=meta-llama/Llama-3.1-8B-Instruct:novita
