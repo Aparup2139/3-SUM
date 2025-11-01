@@ -1,4 +1,4 @@
-import Event from "../models/Event";
+import Event from "../models/Event.js";
 
 const getAllEvents = async (req, res) => {
     try {
@@ -11,13 +11,19 @@ const getAllEvents = async (req, res) => {
 
 const createEvent = async (req, res) => {
     try {
-        const { title, description, organizer, date, location, category, totalTickets, basePrice, priceMin, priceMax } = req.body;
+        console.log(req.user);
+       const  {organizer}  = req.user.id;
+        const { title, description, date, venue,city, category, totalTickets, basePrice, priceMin, priceMax } = req.body;
+        if(!title || !description || !organizer || !date || !totalTickets || !basePrice || !priceMin || !priceMax){
+            return res.status(400).json({message:"Please provide all required fields"});
+        }
         const newEvent = new Event({
             title,
             description,    
             organizer,
             date,
-            location,
+            venue,
+            city,
             category,
             totalTickets,
             basePrice,
