@@ -51,6 +51,11 @@ const BookingSchema = new mongoose.Schema({
      //  required: true,
         unique: true
     },
+    qrCodeUrl: {
+        type: String,
+     //  required: true,
+        unique: true
+    },
     // Fraud Prevention: Prevents reuse after entry scan
     isScanned: {
         type: Boolean,

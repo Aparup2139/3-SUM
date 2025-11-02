@@ -5,6 +5,7 @@ import { UserRole} from "@/types/types";
 import { Skeleton } from "@/components/ui/skeleton";
 // import { useCallback } from "react";
 import { TrendingEventCard } from "../profilepageUI/trendingEventCard";
+import { randomUUID } from "crypto";
 
 
 
@@ -172,7 +173,7 @@ const sampleEvents = [
         currentPrice: 800,
     },
     {
-        id: "67254c0a8d5f1b1000000010",
+        id: randomUUID(),
         title: "AI & Robotics World Forum",
         short_description: "Discussing AI ethics and automation’s future.",
         long_description:
