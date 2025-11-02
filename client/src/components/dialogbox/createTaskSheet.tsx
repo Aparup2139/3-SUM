@@ -34,7 +34,7 @@ export function CreateTaskSheet({ type = 1, TriggerJsx = <><FilePlus /> Create E
         </Button>
       </SheetTrigger>
       <SheetContent >
-        <AddEventForm />
+        <AddEventForm onClose={() => setExplicitOpen(false)} />
       </SheetContent>
     </Sheet>
   )
@@ -53,8 +53,8 @@ type EventPayload = {
   bannerImg: string;
   title: string;
   description: string;
-  startDate: string;
-  endDate: string;
+  start_date: string;
+  end_date: string;
   venue: string;
   city: string;
   category: string;
@@ -67,15 +67,16 @@ type EventPayload = {
 type Props = {
   initial?: Partial<EventPayload>;
   onCreate?: (payload: EventPayload) => void;
+  onClose: () => void
 };
 
-export default function AddEventForm({ initial = {}, onCreate }: Props) {
+export default function AddEventForm({ initial = {}, onCreate, onClose }: Props) {
   const [form, setForm] = useState<EventPayload>({
     bannerImg: initial.bannerImg ?? "",
     title: initial.title ?? "",
     description: initial.description ?? "",
-    startDate: initial.startDate ?? "",
-    endDate: initial.endDate ?? "",
+    start_date: initial.start_date ?? "",
+    end_date: initial.end_date ?? "",
     venue: initial.venue ?? "",
     city: initial.city ?? "",
     category: initial.category ?? "",
@@ -98,10 +99,10 @@ export default function AddEventForm({ initial = {}, onCreate }: Props) {
     if (!form.bannerImg) e.bannerImg = "Banner image URL is required";
     if (!form.title) e.title = "Title is required";
     if (!form.description) e.description = "Description is required";
-    if (!form.startDate) e.startDate = "Start date/time is required";
-    if (!form.endDate) e.endDate = "End date/time is required";
-    if (form.startDate && form.endDate && new Date(form.endDate) <= new Date(form.startDate))
-      e.endDate = "End must be after start";
+    if (!form.start_date) e.start_date = "Start date/time is required";
+    if (!form.end_date) e.end_date = "End date/time is required";
+    if (form.start_date && form.end_date && new Date(form.end_date) <= new Date(form.start_date))
+      e.end_date = "End must be after start";
     if (!form.venue) e.venue = "Venue is required";
     if (!form.city) e.city = "City is required";
     if (!form.category) e.category = "Category is required";
@@ -137,8 +138,8 @@ export default function AddEventForm({ initial = {}, onCreate }: Props) {
         bannerImg: "",
         title: "",
         description: "",
-        startDate: "",
-        endDate: "",
+        start_date: "",
+        end_date: "",
         venue: "",
         city: "",
         category: "",
@@ -163,6 +164,7 @@ export default function AddEventForm({ initial = {}, onCreate }: Props) {
       console.log("create response:", result);
       setErrors({});
     } finally {
+      onClose();
       setSubmitting(false);
     }
   }
@@ -202,19 +204,19 @@ export default function AddEventForm({ initial = {}, onCreate }: Props) {
               <Label className="mb-1 block">Start (date & time)</Label>
               <Input
                 type="datetime-local"
-                value={form.startDate}
-                onChange={(v) => update("startDate", v.target.value)}
+                value={form.start_date}
+                onChange={(v) => update("start_date", v.target.value)}
               />
-              {errors.startDate && <p className="text-sm text-red-600">{errors.startDate}</p>}
+              {errors.start_date && <p className="text-sm text-red-600">{errors.start_date}</p>}
             </div>
             <div>
               <Label className="mb-1 block">End (date & time)</Label>
               <Input
                 type="datetime-local"
-                value={form.endDate}
-                onChange={(v) => update("endDate", v.target.value)}
+                value={form.end_date}
+                onChange={(v) => update("end_date", v.target.value)}
               />
-              {errors.endDate && <p className="text-sm text-red-600">{errors.endDate}</p>}
+              {errors.end_date && <p className="text-sm text-red-600">{errors.end_date}</p>}
             </div>
           </div>
 
@@ -301,8 +303,8 @@ export default function AddEventForm({ initial = {}, onCreate }: Props) {
                   bannerImg: "",
                   title: "",
                   description: "",
-                  startDate: "",
-                  endDate: "",
+                  start_date: "",
+                  end_date: "",
                   venue: "",
                   city: "",
                   category: "",

@@ -33,12 +33,12 @@ const getAllEvents = asyncHandler(async (req, res) => {
 const createEvent = asyncHandler(async (req, res) => {
     // Note: You must ensure req.user is available via 'protect' middleware
     const organizer = req.user._id || req.user.id;
-    const { title, description, bannerImg, startDate, endDate, venue, city, category, totalTickets, basePrice, priceMin, priceMax } = req.body;
+    const { title, description, bannerImg, start_date, end_date, venue, city, category, totalTickets, basePrice, priceMin, priceMax } = req.body;
 
 
     console.log("req.body:", req.body);
     // Basic validation
-    if (!title || !description || !bannerImg || !organizer || !startDate || !endDate || !totalTickets || !basePrice || !priceMin || !priceMax) {
+    if (!title || !description || !bannerImg || !organizer || !start_date || !end_date || !totalTickets || !basePrice || !priceMin || !priceMax) {
         res.status(400);
         throw new Error("Please provide all required fields.");
     }
@@ -46,10 +46,10 @@ const createEvent = asyncHandler(async (req, res) => {
     const newEvent = new Event({
         title,
         description,
-        eventImageUrl: banneri,
+        eventImageUrl: bannerImg,
         organizer,
-        start_date: startDate,
-        end_date: endDate,
+        start_date,
+        end_date,
         venue,
         city,
         category,
