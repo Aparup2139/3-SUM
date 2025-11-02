@@ -1,56 +1,44 @@
 import { useState } from "react";
-import { Separator } from "@/components/ui/separator";
 import { motion } from "framer-motion";
 import { BrushCleaning } from "lucide-react";
 import EventCard from "../tasksPageUI/eventCard";
 import BookedTicketCard from "./bookingsCard";
 import { useQuery } from "@tanstack/react-query";
-import type { TaskDataType } from "@/types/types";
-import { fetchEvents } from "@/httpfnc/user";
+import type { BookingType } from "@/types/types";
+import { fetchBookedEvents } from "@/httpfnc/user";
 import { baseUrl } from "@/constast";
-
-
-export const cityArray = [
-  "Bangalore",
-  "Mumbai",
-  "Delhi",
-  "Hyderabad",
-  "Chennai",
-  "Pune",
-  "Kolkata",
-  "Goa",
-  "Ahmedabad",
-  "Jaipur",
-];
-
-
+import { Separator } from "@/components/ui/separator";
 
 export const LeftContent = () => {
   const [activeTab, setActiveTab] = useState<number>(1);
-  const { data: sampleEvents, isLoading } = useQuery<TaskDataType[]>({
+  const { data: bookings, isLoading } = useQuery<BookingType[]>({
     queryKey: ["fetchUserEvents"],
-    queryFn: () => fetchEvents(baseUrl + `events/user`),
-
-  })
+    queryFn: () => fetchBookedEvents(baseUrl + `events/user`),
+  });
 
   const now = new Date();
 
-  const upcomingEvents = sampleEvents
-    ? sampleEvents.filter(event => new Date(event.start_date) > now)
+  console.log("bookings", bookings);
+  const upcomingEvents = bookings
+    ? bookings.filter((booking) => new Date(booking.event.start_date) > now)
     : [];
 
-  const ongoingEvents = sampleEvents
-    ? sampleEvents.filter(
-      event =>
-        new Date(event.start_date) <= now &&
-        new Date(event.end_date) >= now
-    )
+  const ongoingEvents = bookings
+    ? bookings.filter(
+        (booking) =>
+          new Date(booking.event.start_date) <= now &&
+          new Date(booking.event.end_date) >= now
+      )
     : [];
 
-  const pastEvents = sampleEvents
-    ? sampleEvents.filter(event => new Date(event.end_date) < now)
+  console.log("upcoing events0 ", upcomingEvents);
+
+  const pastEvents = bookings
+    ? bookings.filter((booking) => new Date(booking.event.end_date) < now)
     : [];
 
+
+  console.log("upcoing events0 ", upcomingEvents);
 
   const renderEmptyState = (label: string) => (
     <div className="text-muted-foreground h-full text-sm flex flex-col gap-5 items-center justify-center">
@@ -59,17 +47,17 @@ export const LeftContent = () => {
     </div>
   );
 
-  const renderEvents = (events: typeof sampleEvents, label: string) => {
+  const renderEvents = (events: BookingType[] | undefined, label: string) => {
     if (isLoading)
       return Array.from({ length: 3 }).map((_, i) => (
         <EventCard key={i} loading />
       ));
 
-    if (events.length === 0) return renderEmptyState(label);
-    return events.map((event) => (
+    if (events?.length === 0) return renderEmptyState(label);
+    return events?.map((event) => (
       <BookedTicketCard
-        pastEvent={event.end_date < now}
-        key={event.id}
+        pastEvent={event.event.end_date < now}
+        key={event._id}
         {...event}
       />
     ));
@@ -107,8 +95,8 @@ export const LeftContent = () => {
         {activeTab === 1
           ? "Upcoming events you can explore"
           : activeTab === 2
-            ? "Events happening right now"
-            : "Past events that have concluded"}
+          ? "Events happening right now"
+          : "Past events that have concluded"}
       </div>
     </div>
   );
@@ -139,8 +127,9 @@ const Tab = ({
       duration: 0.1,
       ease: "easeInOut",
     }}
-    className={`cursor-pointer h-full flex justify-center items-center border-r px-5 transition-colors duration-300 ${isActive ? "bg-foreground/80 text-background border-border" : ""
-      }`}
+    className={`cursor-pointer h-full flex justify-center items-center border-r px-5 transition-colors duration-300 ${
+      isActive ? "bg-foreground/80 text-background border-border" : ""
+    }`}
   >
     {text}
   </motion.div>

@@ -27,7 +27,7 @@ interface EventCardProps {
 
 export default function BookedTicketCard({
   pastEvent,
-  id,
+  _id,
   title = "Tech Innovators Summit 2025",
   short_description = "A premier event showcasing future technology trends.",
   start_date = new Date("2025-02-15T09:00:00Z"),
@@ -52,9 +52,6 @@ export default function BookedTicketCard({
   const ticketsAvailable = totalTickets - ticketsSold;
   const soldPercentage = ((ticketsSold / totalTickets) * 100).toFixed(1);
   const availabilityStatus = ticketsAvailable > 100 ? "Available" : ticketsAvailable > 0 ? "Limited" : "Sold Out";
-  
-
-  
 
   if (loading) {
     return (
@@ -79,7 +76,7 @@ export default function BookedTicketCard({
 
   return (
     <Card
-      onClick={() => navigate("/home/event/" + id)}
+      onClick={() => navigate("/home/event/" + _id)}
       className="overflow-x border-slate-800 bg-slate-900/60 backdrop-blur w-full max-w-3xl shadow-md hover:shadow-lg transition-all duration-300">
       <div className="relative h-48 overflow-hidden">
         <img

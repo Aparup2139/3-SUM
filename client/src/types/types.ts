@@ -88,6 +88,25 @@ export interface TaskDataType {
   description?:string
 }
 
+export interface Attendee {
+  name: string,
+  age: number,
+  gender: string,
+  _id: string
+}
+
+export interface BookingType {
+  bookingDate: string,
+  event: TaskDataType
+  isScanned: boolean,
+  qrCodeKey: string,
+  qrCodeUrl: string,
+  razorpayStatus: string,
+  tickets: Attendee[],
+  totalAmount: number,
+  user: string,
+  _id: string
+}
 export interface userSearchType {
   id: string;
   name: string;

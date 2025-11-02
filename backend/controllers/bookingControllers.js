@@ -3,7 +3,7 @@ import Booking from "../models/Booking.js";
 import * as bookingService from "../services/bookingService.js";
 import { generateQrCodeUrl } from "../services/qrService.js";
 import * as paymentService from "../services/paymentService.js";
-
+import { v4 as uuid } from "uuid";
 // --- 1. Create Razorpay Order (before payment) ---
 // @route POST /api/v1/bookings/create-order
 // @access Protected
@@ -13,6 +13,7 @@ export const createOrder = asyncHandler(async (req, res) => {
   if (!attendees) {
     return res.status(400).json({ error: "Attendees missing!" });
   }
+  console.log("Here", 1);
   if (
     !amount ||
     !eventId ||
@@ -21,22 +22,25 @@ export const createOrder = asyncHandler(async (req, res) => {
   ) {
     res.status(400);
     throw new Error("Invalid booking data");
-  } 
-
+  }
+  console.log("Here", 2);
   // Create a Razorpay order
   const order = await paymentService.createPaymentOrder(
     amount,
     `receipt_${userId}}`
   );
+  console.log("The order is", order);
   const newBooking = await Booking.create({
     user: userId,
     event: eventId,
     tickets: attendees,
-    totalAmount:amount,
+    qrCodeUrl: uuid(),
+    qrCodeKey: uuid(),
+    totalAmount: amount,
     paymentStatus: "pending",
     razorpayOrderId: order.id,
   });
-
+  console.log("The newBooking is", newBooking);
   res.status(201).json({
     success: true,
     orderId: order.id,
@@ -55,7 +59,7 @@ export const verifyPayment = asyncHandler(async (req, res) => {
     razorpay_order_id,
     razorpay_payment_id,
     razorpay_signature,
-    bookingId
+    bookingId,
   } = req.body;
 
   const isValid = paymentService.verifyPaymentSignature(
@@ -80,7 +84,7 @@ export const verifyPayment = asyncHandler(async (req, res) => {
   booking.razorpayPaymentId = razorpay_payment_id;
 
   // Generate QR code for this booking
-  if(!booking._id){
+  if (!booking._id) {
     console.log("The bookingId is not available");
     res.status(500);
     throw new Error("Booking ID not found for QR generation");

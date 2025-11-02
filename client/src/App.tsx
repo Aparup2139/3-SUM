@@ -1,27 +1,28 @@
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import { RootLayout } from './pages/rootlayout'
-import { HomePage } from './pages/HomePage'
-import { NotificationPage } from './pages/notificationPage'
-import { BookingsPage } from './pages/bookingsPage'
-import { AuthPage } from './components/pagesUi/authPage/authPage'
-import { RootPageLayout } from './components/landingpage/rootPageLayout'
-import { LandingPage } from './components/landingpage/landingpage'
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RootLayout } from "./pages/rootlayout";
+import { HomePage } from "./pages/HomePage";
+import { NotificationPage } from "./pages/notificationPage";
+import { BookingsPage } from "./pages/bookingsPage";
+import { AuthPage } from "./components/pagesUi/authPage/authPage";
+import { RootPageLayout } from "./components/landingpage/rootPageLayout";
+import { LandingPage } from "./components/landingpage/landingpage";
 
 // import { OAuthPage } from './components/pagesUi/authPage/OAuthPage'
-import { EventCityPage } from './pages/EventCityPage'
-import { SpecificEventPage } from './pages/SpecificEventPage'
-import ProfilePage from './pages/profilePage'
-import { AdminPanelPage } from './components/pagesUi/AdminPanel/adminPanel'
-import { AnalyticsPage } from './components/pagesUi/AdminPanel/analytics'
+import { EventCityPage } from "./pages/EventCityPage";
+import { SpecificEventPage } from "./pages/SpecificEventPage";
+import ProfilePage from "./pages/profilePage";
+import { AdminPanelPage } from "./components/pagesUi/AdminPanel/adminPanel";
+import { AnalyticsPage } from "./components/pagesUi/AdminPanel/analytics";
+import PaymentSuccess from "./components/pagesUi/paymentStatus/paymentSuccess";
+import PaymentFailure from "./components/pagesUi/paymentStatus/paymentFailure";
 const router = createBrowserRouter([
-
   {
     path: "/",
     element: <RootPageLayout />,
     children: [
       {
         index: true,
-        element: <LandingPage />
+        element: <LandingPage />,
       },
 
       {
@@ -33,9 +34,7 @@ const router = createBrowserRouter([
       //   path: "oauth",
       //   element: <OAuthPage />
       // },
-
-
-    ]
+    ],
   },
   {
     path: "/",
@@ -46,7 +45,7 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <HomePage />
+            element: <HomePage />,
           },
           {
             path: ":cityName",
@@ -55,20 +54,20 @@ const router = createBrowserRouter([
           {
             path: "event/:eventId",
             element: <SpecificEventPage />,
-          }
-        ]
+          },
+        ],
       },
       {
         path: "/profile",
-        element: <ProfilePage />
+        element: <ProfilePage />,
       },
       {
         path: "/bookings",
-        element: <BookingsPage />
+        element: <BookingsPage />,
       },
       {
         path: "/help",
-        element: <NotificationPage />
+        element: <NotificationPage />,
       },
     ],
   },
@@ -77,24 +76,26 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <AdminPanelPage />
+        element: <AdminPanelPage />,
       },
       {
         path: "analytics",
-        element: <AnalyticsPage />
-      }
-      
-    ]
-  }
-])
-
+        element: <AnalyticsPage />,
+      },
+    ],
+  },
+  {
+    path: "/payment-success",
+    element: <PaymentSuccess />,
+  },
+  {
+    path: "/payment-failure",
+    element: <PaymentFailure />,
+  },
+]);
 
 function App() {
-
-  return (
-    <RouterProvider router={router}>
-    </RouterProvider>
-  )
+  return <RouterProvider router={router}></RouterProvider>;
 }
 
-export default App
+export default App;

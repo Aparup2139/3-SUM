@@ -1,6 +1,15 @@
-import express from 'express';
-import { getAllEvents, createEvent, updateEvent, deleteEvent, getUserupcomingevents, geteventhostedbyuser, getEventDetailsById, getUserEvents } from '../controllers/eventControllers.js';
-import { protect, adminCheck } from '../middleware/authMiddleware.js';
+import express from "express";
+import {
+  getAllEvents,
+  createEvent,
+  updateEvent,
+  deleteEvent,
+  getUserupcomingevents,
+  geteventhostedbyuser,
+  getEventDetailsById,
+  getUserEvents,
+} from "../controllers/eventControllers.js";
+import { protect, adminCheck } from "../middleware/authMiddleware.js";
 const router = express.Router();
 router.get('/', getAllEvents);
 router.post('/create', protect, adminCheck, createEvent);
