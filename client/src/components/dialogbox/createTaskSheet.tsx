@@ -166,7 +166,7 @@ export default function AddEventForm({ initial = {}, onCreate, onClose }: Props)
     } finally {
       onClose();
       setSubmitting(false);
-    }
+    } 
   }
 
   return (
