@@ -82,6 +82,7 @@ export interface TaskDataType {
   priceMax: number;
   currentPrice: number;
   title: string;
+  eventImageUrl : string;
 }
 
 export interface userSearchType {

@@ -229,7 +229,7 @@ export const RightContent = () => {
         <div className=" h-[3%] w-full flex gap-2 flex-col " >
             <h1>Trending Events</h1>
             <p className="opacity-70 text-sm">
-                Discover the latest high-impact events where creators, editors, and YouTubers are gaining traction.
+                Discover top events where creators and YouTubers are rising fast.
                 Browse top-performing tasks, recent uploads, and trending challenges to find opportunities to collaborate or showcase your work.
             </p>
         </div>

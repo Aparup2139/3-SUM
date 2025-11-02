@@ -39,6 +39,7 @@ interface EventCardProps {
   priceMax?: number;
   currentPrice?: number;
   loading?: boolean;
+  eventImageUrl?: string,
 }
 
 export default function EventCard({
@@ -53,6 +54,7 @@ export default function EventCard({
   totalTickets = 500,
   ticketsSold = 320,
   currentPrice = 2200,
+  eventImageUrl,
   loading = false,
 }: EventCardProps) {
   const formatDate = (date: Date) => {
@@ -117,7 +119,7 @@ export default function EventCard({
       )}
       <div className="relative h-48 overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&h=400&fit=crop"
+          src={eventImageUrl}
           alt={title}
           className="w-full h-full object-cover opacity-90"
         />

@@ -201,16 +201,22 @@ const sampleEvents = [
 
 export const LeftContent = () => {
     const [activeTab, setActiveTab] = useState<number>(1)
-    const isLoading = false
+
     const { cityName } = useParams();
+    const { data: sampleEvents, isLoading } = useQuery<TaskDataType[]>({
+        queryKey: ["fetchAllEvents"],
+        queryFn: () => fetchEvents(baseUrl + `events?city=${cityName}`),
+
+    })
+
 
     const now = new Date()
 
-    const upcomingEvents = sampleEvents.filter(event => event.start_date > now)
-    const ongoingEvents = sampleEvents.filter(
+    const upcomingEvents = sampleEvents ? sampleEvents.filter(event => event.start_date > now) : []
+    const ongoingEvents = sampleEvents ? sampleEvents.filter(
         event => event.start_date <= now && event.end_date >= now
-    )
-    const pastEvents = sampleEvents.filter(event => event.end_date < now)
+    ) : []
+    const pastEvents = sampleEvents ? sampleEvents.filter(event => event.end_date < now) : []
 
     const renderEmptyState = (label: string) => (
         <div className="text-muted-foreground h-full text-sm flex flex-col gap-5 items-center justify-center">
@@ -221,6 +227,7 @@ export const LeftContent = () => {
 
     const renderEvents = (events: typeof sampleEvents, label: string) => {
 
+        if(!events) return renderEmptyState(label)
         if (isLoading) return Array.from({ length: 3 }).map((_, i) => <EventCard key={i} loading />)
 
         if (events.length === 0) return renderEmptyState(label)
@@ -307,6 +314,10 @@ import {
     Waves,
     Factory,
 } from "lucide-react"
+import type { TaskDataType } from "@/types/types"
+import { useQuery } from "@tanstack/react-query"
+import { baseUrl } from "@/constast"
+import { fetchEvents } from "@/httpfnc/user"
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const cityMeta = [

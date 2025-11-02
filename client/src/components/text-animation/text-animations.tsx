@@ -18,9 +18,9 @@ export function GradientText({ text, size = "large" }: { size?: string, text: st
 
 export const LandingPara = () => {
 
-  const textArr = ["Assign Editors", "Chill & Relax", "Preview & Publish"]
+  const textArr = ["Create Events", "Buy Tickets", "AI chatbot"]
   const [index, setIndex] = useState<number>(0);
-  const emojiArr = ["✨","✈️⛱️", ""]
+  const emojiArr = ["🤩","🍿","✨"]
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -51,11 +51,11 @@ export const LandingPara = () => {
        dark:bg-gradient-to-r dark:from-orange-400 dark:via-red-500 dark:to-pink-500  
        bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
           >{textArr[index]}</span>
-          {emojiArr[index]}.
+          {emojiArr[index]}
         </motion.span>
       </span>
 
-    </span> Review and publish to YouTube. No re-uploads, no internet waste.
+    </span> Create/Discover events with optimal prices. AI analysis and chatbot for best UX
   </motion.h1>)
 }
 

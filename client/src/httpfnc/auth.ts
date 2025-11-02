@@ -47,7 +47,7 @@ const RegisterUser = async (data: {
 };
 
 const checkAuth = async () => {
-  const response = await fetch(baseUrl + `user/check-auth`, {
+  const response = await fetch(baseUrl + `auth/me`, {
     method: "GET",
     credentials: "include",
     headers: {
@@ -63,8 +63,8 @@ const checkAuth = async () => {
 };
 
 const logout = async () => {
-  const response = await fetch(baseUrl + `user/logout`, {
-    method: "POST",
+  const response = await fetch(baseUrl + `auth/me`, {
+    method: "GET",
     credentials: "include",
     headers: {
       "Content-Type": "application/json",

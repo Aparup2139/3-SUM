@@ -59,42 +59,41 @@ export const dashboardOptions = {
     },
   ],
 };
-
 export const ProfileImageData = [
   {
-    id: 1,
+    id: "1",
     url: "https://randomuser.me/api/portraits/men/1.jpg",
   },
   {
-    id: 2,
+    id: "2",
     url: "https://randomuser.me/api/portraits/men/32.jpg",
   },
   {
-    id: 3,
+    id: "3",
     url: "https://randomuser.me/api/portraits/men/45.jpg",
   },
   {
-    id: 4,
+    id: "4",
     url: "https://randomuser.me/api/portraits/men/67.jpg",
   },
   {
-    id: 5,
+    id: "5",
     url: "https://randomuser.me/api/portraits/women/12.jpg",
   },
   {
-    id: 6,
+    id: "6",
     url: "https://randomuser.me/api/portraits/women/28.jpg",
   },
   {
-    id: 7,
+    id: "7",
     url: "https://randomuser.me/api/portraits/women/44.jpg",
   },
   {
-    id: 8,
+    id: "8",
     url: "https://randomuser.me/api/portraits/women/65.jpg",
   },
   {
-    id: 9,
+    id: "9",
     url: "https://randomuser.me/api/portraits/women/89.jpg",
   },
 ];

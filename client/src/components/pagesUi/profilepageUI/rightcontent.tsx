@@ -1,7 +1,7 @@
 
 import { useUserStore } from "@/store/user.store"
 
-import { UserRole} from "@/types/types";
+import { UserRole } from "@/types/types";
 import { Skeleton } from "@/components/ui/skeleton";
 // import { useCallback } from "react";
 import { TrendingEventCard } from "../profilepageUI/trendingEventCard";
@@ -215,8 +215,7 @@ export const RightContent = () => {
         <div className=" h-[5%] w-full mb-10 " >
             <h1>Trending Events</h1>
             <p className="opacity-70 text-sm">
-                Discover the latest high-impact events where creators, editors, and YouTubers are gaining traction.
-                Browse top-performing tasks, recent uploads, and trending challenges to find opportunities to collaborate or showcase your work.
+                Discover top events where creators and YouTubers are rising fast.
             </p>
         </div>
         {role === UserRole.NORMAL && <div className=" h-[3%] flex flex-col gap-1 w-full " >
