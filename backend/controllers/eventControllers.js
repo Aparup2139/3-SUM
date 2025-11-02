@@ -33,10 +33,12 @@ const getAllEvents = asyncHandler(async (req, res) => {
 const createEvent = asyncHandler(async (req, res) => {
     // Note: You must ensure req.user is available via 'protect' middleware
     const organizer = req.user._id || req.user.id;
-    const { title, description, date, venue, city, category, totalTickets, basePrice, priceMin, priceMax } = req.body;
+    const { title, description, bannerImg, startDate, endDate, venue, city, category, totalTickets, basePrice, priceMin, priceMax } = req.body;
 
+
+    console.log("req.body:", req.body);
     // Basic validation
-    if (!title || !description || !organizer || !date || !totalTickets || !basePrice || !priceMin || !priceMax) {
+    if (!title || !description || !bannerImg || !organizer || !startDate || !endDate || !totalTickets || !basePrice || !priceMin || !priceMax) {
         res.status(400);
         throw new Error("Please provide all required fields.");
     }
@@ -44,8 +46,10 @@ const createEvent = asyncHandler(async (req, res) => {
     const newEvent = new Event({
         title,
         description,
+        eventImageUrl: banneri,
         organizer,
-        date,
+        start_date: startDate,
+        end_date: endDate,
         venue,
         city,
         category,
@@ -138,13 +142,13 @@ const getUserupcomingevents = asyncHandler(async (req, res) => {
 
 // --- 8. GET All Events Hosted by User (Logic restored from previous prompt) ---
 const geteventhostedbyuser = asyncHandler(async (req, res) => {
-    const userId = req.params.userId;
+    const userId = req.user._id || req.user.id;
     if (!userId) {
         res.status(400);
         throw new Error("User ID is required");
     }
-
-    const hostedEvents = await Event.find({ organizer: userId }).sort({ date: -1 });
+    console.log("userId:", userId);
+    const hostedEvents = await Event.find({ organizer: userId })
 
     res.status(200).json({ hostedEvents, msg: "Events hosted by user fetched successfully" });
 });

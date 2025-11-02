@@ -7,9 +7,9 @@ router.post('/create', protect, adminCheck, createEvent);
 router.put('/update/:id', updateEvent);
 router.delete('/delete/:id', deleteEvent);
 router.get('/user', protect, getUserEvents);
+router.get('/organizer',protect, geteventhostedbyuser);
 
 router.get('/:id', getEventDetailsById);
 router.get('/upcoming/user/:userId', getUserupcomingevents);
-router.get('/organizer/:userId', geteventhostedbyuser);
 
 export default router;

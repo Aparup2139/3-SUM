@@ -9,7 +9,8 @@ import eventRoutes from "./routes/eventRoutes.js"; // Include core platform rout
 import bookingRoutes from "./routes/bookingRoutes.js"; // Include core platform routes
 import llmRoutes from "./routes/llmRoutes.js"; // Updated path to src/routes
 import cookieParser from "cookie-parser";
-
+import reviewRoutes from 
+"./routes/reviewRoutes.js"; // Include review routes
 // Dependencies for Passport strategy initialization and LLM config
 import "./config/passport.js"; 
 import { initializeLLaMAClient } from "./config/llama.js"; 
@@ -70,6 +71,7 @@ app.use(passport.session());
 // -----------------------------
 // 🧩 Routes
 // -----------------------------
+app.use("/api/v1/reviews", reviewRoutes); // Review routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/events", eventRoutes); // Core event management routes
 app.use("/api/v1/bookings", bookingRoutes); // Core booking/payment routes

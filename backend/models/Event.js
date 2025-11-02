@@ -1,12 +1,18 @@
 import mongoose from 'mongoose';
 
 const EventSchema = new mongoose.Schema({
+
     title: {
         type: String,
         required: true
     },
     image: {
         type: String,
+        default: 'default-event.png' // Default image path/URL
+    },
+    eventImageUrl: {
+        type: String,
+        required: true,
         default: 'default-event.png' // Default image path/URL
     },
     description: {
@@ -18,7 +24,11 @@ const EventSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    date: {
+    start_date: {
+        type: Date,
+        required: true
+    },
+    end_date: {
         type: Date,
         required: true
     },
@@ -27,10 +37,13 @@ const EventSchema = new mongoose.Schema({
     },
     city: {
         type: String,
+        // Added index for efficient filtering by city
         index: true
     },
     category: {
-        type: String,
+        type: String, // e.g., 'Tech', 'Music', 'Arts'
+        // Added index for efficient filtering by category
+        index: true
     },
     totalTickets: {
         type: Number,
