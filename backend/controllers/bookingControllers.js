@@ -8,22 +8,31 @@ import * as paymentService from "../services/paymentService.js";
 // @route POST /api/v1/bookings/create-order
 // @access Protected
 export const createOrder = asyncHandler(async (req, res) => {
-  const { amount, currency,eventId,attendes,ticketCount } = req.body;
-  const userId = req.user._id;
-  if (!amount || !eventId || !Array.isArray(attendes) || attendes.length === 0) {
+  const { amount, currency, eventId, attendees, ticketCount } = req.body;
+  const userId = req.user._id || req.user.id;
+  if (!attendees) {
+    return res.status(400).json({ error: "Attendees missing!" });
+  }
+  if (
+    !amount ||
+    !eventId ||
+    !Array.isArray(attendees) ||
+    attendees.length === 0
+  ) {
     res.status(400);
     throw new Error("Invalid booking data");
   } 
 
   // Create a Razorpay order
-  const order = await paymentService.createPaymentOrder(totalAmount, `receipt_${userId}_${Date.now()}`);
-
-  // Temporarily store a pending booking (unpaid)
+  const order = await paymentService.createPaymentOrder(
+    amount,
+    `receipt_${userId}}`
+  );
   const newBooking = await Booking.create({
     user: userId,
     event: eventId,
-    tickets,
-    totalAmount,
+    tickets: attendees,
+    totalAmount:amount,
     paymentStatus: "pending",
     razorpayOrderId: order.id,
   });
@@ -42,7 +51,12 @@ export const createOrder = asyncHandler(async (req, res) => {
 // @route POST /api/v1/bookings/verify-payment
 // @access Protected
 export const verifyPayment = asyncHandler(async (req, res) => {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature,bookingId} = req.body;
+  const {
+    razorpay_order_id,
+    razorpay_payment_id,
+    razorpay_signature,
+    bookingId
+  } = req.body;
 
   const isValid = paymentService.verifyPaymentSignature(
     razorpay_order_id,
@@ -66,8 +80,16 @@ export const verifyPayment = asyncHandler(async (req, res) => {
   booking.razorpayPaymentId = razorpay_payment_id;
 
   // Generate QR code for this booking
-  const { qrCodeUrl, qrCodeKey } = await bookingService.generateQrForBooking(booking._id);
-
+  if(!booking._id){
+    console.log("The bookingId is not available");
+    res.status(500);
+    throw new Error("Booking ID not found for QR generation");
+  }
+  const { qrCodeUrl, qrCodeKey } = await bookingService.generateQrForBooking(
+    booking._id
+  );
+  console.log("The qrCodeUrl", qrCodeUrl);
+  console.log("The qrCodeKey", qrCodeKey);
   booking.qrCodeUrl = qrCodeUrl;
   booking.qrCodeKey = qrCodeKey;
   await booking.save();

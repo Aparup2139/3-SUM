@@ -35,13 +35,13 @@ const TicketBookingModal: React.FC<TicketBookingModalProps> = ({
   isOpen,
   onClose,
   eventId,
-  eventName = "Event Name",
-  ticketPrice = 500,
+  eventName,
+  ticketPrice,
 }) => {
   const [formData, setFormData] = useState({
     ticketCount: 1,
   });
-
+  console.log("eventId", eventId);
   const [attendees, setAttendees] = useState<AttendeeInfo[]>([
     { name: "", age: "", gender: "" },
   ]);
@@ -139,7 +139,12 @@ const TicketBookingModal: React.FC<TicketBookingModalProps> = ({
 
   const createOrder = async (amount: number) => {
     try {
-      const response = await fetch(baseUrl + "create-order", {
+      console.log("amount", amount);
+      console.log("currency", "INR");
+      console.log("eventId", eventId);
+      console.log("attendees", attendees);
+      console.log("ticketCount", formData.ticketCount);
+      const response = await fetch(baseUrl + "bookings/create-order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -151,6 +156,7 @@ const TicketBookingModal: React.FC<TicketBookingModalProps> = ({
           attendees,
           ticketCount: formData.ticketCount,
         }),
+        credentials: "include",
       });
 
       const data = await response.json();
@@ -161,30 +167,36 @@ const TicketBookingModal: React.FC<TicketBookingModalProps> = ({
     }
   };
 
-  const handlePayment = async (orderId: string, amount: number) => {
+  const handlePayment = async (
+    bookingId: string,
+    amount: number,
+    order_id: string
+  ) => {
     const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID,
       amount: amount,
       currency: "INR",
       name: "Mid-Events",
       description: `Ticket booking for ${eventName}`,
-      order_id: orderId,
+      order_id: order_id,
       handler: async function (response: unknown) {
         try {
-          const verifyResponse = await fetch(baseUrl + "verify-payment", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-              eventId,
-              attendees,
-              ticketCount: formData.ticketCount,
-            }),
-          });
+          const verifyResponse = await fetch(
+            baseUrl + "bookings/verify-payment",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                bookingId: bookingId,
+              }),
+              credentials: "include",
+            }
+          );
 
           const result = await verifyResponse.json();
 
@@ -226,13 +238,17 @@ const TicketBookingModal: React.FC<TicketBookingModalProps> = ({
     }
 
     setIsProcessing(true);
-    const totalAmount = formData.ticketCount * ticketPrice;
+    const totalAmount = formData.ticketCount * (ticketPrice || 10);
 
     try {
       const orderData = await createOrder(totalAmount);
       console.log("The orderData is", orderData);
       if (orderData.orderId) {
-        await handlePayment(orderData.orderId, totalAmount);
+        await handlePayment(
+          orderData.bookingId,
+          totalAmount,
+          orderData.orderId
+        );
       } else {
         throw new Error("Failed to create order");
       }
@@ -243,7 +259,7 @@ const TicketBookingModal: React.FC<TicketBookingModalProps> = ({
     }
   };
 
-  const totalAmount = formData.ticketCount * ticketPrice;
+  const totalAmount = formData.ticketCount * (ticketPrice || 10);
 
   if (!isOpen) return null;
 
@@ -277,9 +293,7 @@ const TicketBookingModal: React.FC<TicketBookingModalProps> = ({
           </div>
         </div>
 
-        {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto p-6 space-y-5">
-          {/* Ticket Count */}
           <div>
             <label className="flex items-center gap-2 text-sm text-foreground/80 mb-2">
               <Ticket size={16} />
@@ -320,7 +334,6 @@ const TicketBookingModal: React.FC<TicketBookingModalProps> = ({
             </div>
           </div>
 
-          {/* Attendees Information */}
           <div className="space-y-4">
             <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
               <User size={16} />
