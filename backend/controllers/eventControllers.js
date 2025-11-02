@@ -4,12 +4,7 @@ import asyncHandler from 'express-async-handler'; // Recommended for handling as
 // --- 1. GET Events with Filters ---
 const getAllEvents = asyncHandler(async (req, res) => {
     const { city, category, userQuery: titleQuery } = req.query;
-
-    let filter = {
-        isPublished: true,
-        date: { $gte: new Date() }
-    };
-
+    let filter = {};
     if (city) {
         filter.city = { $regex: city, $options: 'i' }; 
     }
@@ -20,7 +15,7 @@ const getAllEvents = asyncHandler(async (req, res) => {
         filter.title = { $regex: titleQuery, $options: 'i' }; 
     }
     
-    const events = await Event.find(filter).sort({ date: 1 });
+    const events = await Event.find(filter)
 
     if (events.length === 0) {
         return res.status(404).json({ message: "No events found matching your criteria." });
