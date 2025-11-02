@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { useOpenTaskUpdate } from "@/store/updateTaskSheet";
 import { useState } from "react";
 import TicketBookingModal from "@/components/ticketBookingModal";
-import { randomUUID } from "crypto";
+import { v4 as uuidv4 } from 'uuid';
 
 interface EventCardProps {
   admin?: boolean;
@@ -44,7 +44,7 @@ interface EventCardProps {
 
 export default function EventCard({
   admin = false,
-  id = randomUUID(),
+  id = uuidv4(),
   title = "Tech Innovators Summit 2025",
   short_description = "A premier event showcasing future technology trends.",
   start_date = new Date("2025-02-15T09:00:00Z"),

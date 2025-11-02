@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
+import { v4 as uuidv4 } from 'uuid';
+
 
 const sampleEvents = [
   {
@@ -175,7 +177,7 @@ const sampleEvents = [
     currentPrice: 800,
   },
   {
-    id: randomUUID(),
+    id: uuidv4(),
     title: "AI & Robotics World Forum",
     short_description: "Discussing AI ethics and automation’s future.",
     long_description:
@@ -212,7 +214,8 @@ import { Button } from "@/components/ui/button";
 import { Calendar, MapPin, Users, Clock } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import TicketBookingModal from "@/components/ticketBookingModal";
-import { randomUUID } from "crypto";
+
+
 
 interface EventPageProps {
   id?: string;
@@ -233,7 +236,7 @@ interface EventPageProps {
 }
 
 export default function EventPage({
-  id : id = randomUUID(),
+  id : id = uuidv4(),
   title = "Tech Innovators Summit 2025",
   short_description = "A premier event showcasing future technology trends.",
   long_description = "Join global leaders, engineers, and developers to explore the latest in AI, IoT, and robotics. Includes workshops, networking, and panel discussions.",

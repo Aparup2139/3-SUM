@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { BrushCleaning } from "lucide-react"
 import EventCard from "../tasksPageUI/eventCard"
 import { useParams } from "react-router-dom"
+import { v4 as uuidv4 } from 'uuid';
 
 const sampleEvents = [
     {
@@ -178,7 +179,7 @@ const sampleEvents = [
         currentPrice: 800,
     },
     {
-        id: randomUUID(),
+        id: uuidv4(),
         title: "AI & Robotics World Forum",
         short_description: "Discussing AI ethics and automation’s future.",
         long_description:

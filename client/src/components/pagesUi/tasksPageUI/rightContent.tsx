@@ -10,8 +10,7 @@
 //         </div>
 //     </div>
 // }
-
-
+import { v4 as uuidv4 } from 'uuid';
 
 import { useUserStore } from "@/store/user.store"
 
@@ -19,7 +18,6 @@ import { UserRole } from "@/types/types";
 import { Skeleton } from "@/components/ui/skeleton";
 // import { useCallback } from "react";
 import { TrendingEventCard } from "../profilepageUI/trendingEventCard";
-import { randomUUID } from "crypto";
 
 
 
@@ -187,7 +185,7 @@ const sampleEvents = [
         currentPrice: 800,
     },
     {
-        id: randomUUID(),
+        id: uuidv4(),
         title: "AI & Robotics World Forum",
         short_description: "Discussing AI ethics and automation’s future.",
         long_description:

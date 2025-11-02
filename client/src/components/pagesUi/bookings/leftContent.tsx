@@ -4,7 +4,9 @@ import { motion } from "framer-motion";
 import { BrushCleaning } from "lucide-react";
 import EventCard from "../tasksPageUI/eventCard";
 import BookedTicketCard from "./bookingsCard";
-import { randomUUID } from "crypto";
+import { v4 as uuidv4 } from 'uuid';
+
+
 
 export const cityArray = [
   "Bangalore",
@@ -21,7 +23,7 @@ export const cityArray = [
 
 const sampleEvents = [
   {
-    id: "67254c0a8d5f1b1000000001",
+    id: uuidv4(),
     title: "Tech Innovators Summit 2025",
     short_description: "A premier event showcasing future technology trends.",
     long_description:
@@ -40,7 +42,7 @@ const sampleEvents = [
     currentPrice: 2200,
   },
   {
-    id: "67254c0a8d5f1b1000000002",
+    id:uuidv4(),
     title: "CodeCraft Hackathon 2025",
     short_description: "A 48-hour coding challenge for developers worldwide.",
     long_description:
@@ -59,7 +61,7 @@ const sampleEvents = [
     currentPrice: 700,
   },
   {
-    id: "67254c0a8d5f1b1000000003",
+    id: uuidv4(),
     title: "Fusion Beats Fest",
     short_description: "A weekend of electrifying music and performances.",
     long_description:
@@ -78,7 +80,7 @@ const sampleEvents = [
     currentPrice: 2200,
   },
   {
-    id: "67254c0a8d5f1b1000000004",
+    id: uuidv4(),
     title: "Startup Connect Expo",
     short_description: "Where founders meet investors.",
     long_description:
@@ -97,7 +99,7 @@ const sampleEvents = [
     currentPrice: 2800,
   },
   {
-    id: "67254c0a8d5f1b1000000005",
+    id: uuidv4(),
     title: "EcoLife Expo 2025",
     short_description: "Sustainability and green tech exhibition.",
     long_description:
@@ -116,7 +118,7 @@ const sampleEvents = [
     currentPrice: 1500,
   },
   {
-    id: "67254c0a8d5f1b1000000006",
+    id: uuidv4(),
     title: "Artistry Gala 2025",
     short_description: "An exhibition of modern art and sculpture.",
     long_description:
@@ -135,7 +137,7 @@ const sampleEvents = [
     currentPrice: 950,
   },
   {
-    id: "67254c0a8d5f1b1000000007",
+    id: uuidv4(),
     title: "Fitness Fusion 2025",
     short_description: "A celebration of health and fitness.",
     long_description:
@@ -154,7 +156,7 @@ const sampleEvents = [
     currentPrice: 1200,
   },
   {
-    id: "67254c0a8d5f1b1000000008",
+    id: uuidv4(),
     title: "CyberShield Summit",
     short_description: "Exploring the future of cybersecurity.",
     long_description:
@@ -173,7 +175,7 @@ const sampleEvents = [
     currentPrice: 2000,
   },
   {
-    id: "67254c0a8d5f1b1000000009",
+    id: uuidv4(),
     title: "Global Literature Fest",
     short_description: "Where stories meet the world.",
     long_description:
@@ -192,7 +194,7 @@ const sampleEvents = [
     currentPrice: 800,
   },
   {
-    id: randomUUID(),
+    id: uuidv4(),
     title: "AI & Robotics World Forum",
     short_description: "Discussing AI ethics and automation’s future.",
     long_description:
