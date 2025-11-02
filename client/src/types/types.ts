@@ -82,10 +82,9 @@ export interface TaskDataType {
   priceMax: number;
   currentPrice: number;
   title: string;
-  eventImageUrl : string;
-  city?: string,
-  venue?: string,
-  description?:string
+  eventImageUrl: string;
+  venue?: string;
+  city?: string;
 }
 
 export interface Attendee {

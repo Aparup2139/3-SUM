@@ -72,7 +72,7 @@ const ChatMessageDisplay = ({ msg, sampleEvents }: { msg: ChatMessage, sampleEve
   console.log("pyalod event title:", payload?.eventTitle)
   const eventId = sampleEvents.find(s => s.title.toLowerCase() === payload?.eventTitle?.toLowerCase())
   console.log("eventid:", eventId);
-  const eventUrl = `/home/event/6906af95a34a1f58b49d5a4a`;
+  const eventUrl = `/home/event/6906af95a34a1f58b49d5a4b`;
 
   return (
     <div

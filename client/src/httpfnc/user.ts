@@ -70,6 +70,44 @@ const fetchEvents = async (url: string) => {
     return resData.events;
 }
 
+export const fetchBookedEvents = async (url: string) => {
+
+    const response = await fetch(url, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    if (!response.ok) throw new Error("Failed to fetch users");
+    const resData = await response.json();
+
+    if (!response.ok || response.status >= 300) {
+        throw new Error(resData.message || "Failed to fetch users");
+    };
+    console.log("resdata:", resData)
+    return resData.userEvents;
+}
+
+
+export const fetchReviewsOfEvent = async (url: string) => {
+
+    const response = await fetch(url, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    if (!response.ok) throw new Error("Failed to fetch users");
+    const resData = await response.json();
+
+    if (!response.ok || response.status >= 300) {
+        throw new Error(resData.message || "Failed to fetch users");
+    };
+    return resData;
+}
+
 export const fetchEventsOfOrganizer = async (url: string) => {
 
     const response = await fetch(url, {
@@ -106,23 +144,10 @@ export const fetchEventsSpecific = async (url: string) => {
     return resData;
 }
 
-export const fetchReviewsOfEvent = async (url: string) => {
 
-    const response = await fetch(url, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        credentials: "include",
-    });
-    if (!response.ok) throw new Error("Failed to fetch users");
-    const resData = await response.json();
 
-    if (!response.ok || response.status >= 300) {
-        throw new Error(resData.message || "Failed to fetch users");
-    };
-    return resData;
-}
+
+
 
 export const fetchUserEvents = async (url: string) => {
 
