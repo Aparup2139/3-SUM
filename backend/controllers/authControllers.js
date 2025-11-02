@@ -5,7 +5,7 @@ import User from "../models/User.js";
 
 // Generate JWT token
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+  return jwt.sign({ id }, process.env.SECRETKEY, {
     expiresIn: "30h", // token expires in 30 hours
   });
 };
@@ -25,11 +25,16 @@ export const registerUser = async (req, res) => {
     }
 
     const user = await User.create({ fullName, email, password, role }); // <-- use role here
-
-    res.status(201).json({
+const token=generateToken(user._id);
+    res.status(201).cookie("token", token, {
+      httpOnly: true,  
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax" ,
+      maxAge: 24 * 60 * 60 * 1000, 
+    }).json({
       _id: user._id,
       user,
-      token: generateToken(user._id),
+      msg:"User registered successfully",
     });
   } catch (error) {
     console.error(error);
@@ -58,10 +63,16 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid Password" });
     }
     console.log("Loggedin user is", user)
-    res.status(200).json({
+    const token = generateToken(user._id);
+    res.status(200).cookie("token", token, {
+      httpOnly: true,  
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax" ,
+      maxAge: 24 * 60 * 60 * 1000, 
+    }).json({
       _id: user._id,
       user,
-      token: generateToken(user._id),
+      msg:"User logged in successfully",
     });
   } catch (error) {
     console.error(error);
@@ -99,10 +110,19 @@ const profile= async (req,res)=>{
   } 
 };
 
-const logout= async (req,res)=>{
-  // Since JWT is stateless, logout can be handled on the client side by deleting the token.
-  res.status(200).json({message:"User logged out successfully"});
+  const logout= async (req,res)=>{
+       try {res.clearCookie("token",{
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",   
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax" 
+  });
+    return res.status(200).json({msg:"User logged out successfully"});
+}catch(err){
+  
+    return res.status(500).json({ msg: "Logout failed", error: err.message });
 }
+  }
+
 const deleteUser= async (req,res)=>{
   try {
     const id=req.user._id||req.user.id; 

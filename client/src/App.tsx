@@ -12,6 +12,7 @@ import { EventCityPage } from './pages/EventCityPage'
 import { SpecificEventPage } from './pages/SpecificEventPage'
 import ProfilePage from './pages/profilePage'
 import { AdminPanelPage } from './components/pagesUi/AdminPanel/adminPanel'
+import { AnalyticsPage } from './components/pagesUi/AdminPanel/analytics'
 const router = createBrowserRouter([
 
   {
@@ -74,12 +75,15 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin-panel",
-    element: <AdminPanelPage />,
     children: [
       {
         index: true,
         element: <AdminPanelPage />
       },
+      {
+        path: "analytics",
+        element: <AnalyticsPage />
+      }
       
     ]
   }

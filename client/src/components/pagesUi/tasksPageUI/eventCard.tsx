@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { useOpenTaskUpdate } from "@/store/updateTaskSheet";
 import { useState } from "react";
 import TicketBookingModal from "@/components/ticketBookingModal";
+import { randomUUID } from "crypto";
 
 interface EventCardProps {
   admin?: boolean;
@@ -43,7 +44,7 @@ interface EventCardProps {
 
 export default function EventCard({
   admin = false,
-  id,
+  id = randomUUID(),
   title = "Tech Innovators Summit 2025",
   short_description = "A premier event showcasing future technology trends.",
   start_date = new Date("2025-02-15T09:00:00Z"),
@@ -97,7 +98,6 @@ export default function EventCard({
   }
   const handleTicketBooking = () => {
     setIsBooking(true);
-    alert("Ticket booking modal would open here.");
   };
 
   return (
@@ -111,6 +111,9 @@ export default function EventCard({
     >
       {isBooking && (
         <TicketBookingModal
+          eventId={id as string}
+          eventName={title}
+          ticketPrice={currentPrice}
           isOpen={isBooking}
           onClose={setIsBooking}
         />
@@ -176,10 +179,11 @@ export default function EventCard({
           <div className="flex gap-2">
             {admin ? (
               <Button
+                onClick={() =>
+                  navigate(`/admin-panel/analytics?id=${id}&title=${encodeURIComponent(title)}`)
+                }
                 variant="outline"
-                className="
-             bg-gradient-to-r from-purple-700 via-pink-700 to-orange-700
-            text-primary border-background hover:bg-slate-800"
+                className="bg-gradient-to-r from-purple-700 via-pink-700 to-orange-700 text-primary border-background hover:bg-slate-800"
               >
                 <Sparkles /> Get Analytics
               </Button>

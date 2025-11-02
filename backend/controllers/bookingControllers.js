@@ -1,114 +1,104 @@
-import asyncHandler from 'express-async-handler';
-import Booking from '../models/Booking.js';
-import * as bookingService from '../services/bookingService.js'; // Import service layer logic
-import { generateQrCodeUrl } from '../services/qrService.js';
+import asyncHandler from "express-async-handler";
+import Booking from "../models/Booking.js";
+import * as bookingService from "../services/bookingService.js";
+import { generateQrCodeUrl } from "../services/qrService.js";
+import * as paymentService from "../services/paymentService.js";
 
-// --- 1. Initiate Order ---
-// @desc    Initiate Razorpay order creation
-// @route   POST /api/v1/bookings/create-order
-// @access  Protected
+// --- 1. Create Razorpay Order (before payment) ---
+// @route POST /api/v1/bookings/create-order
+// @access Protected
 export const createOrder = asyncHandler(async (req, res) => {
-    // These calls rely on the detailed logic implemented in the bookingService.js file
-    const userId = req.user._id;
-    const { eventId, ticketCount, totalAmount } = req.body;
+  const { amount, currency, eventId, attendees, ticketCount } = req.body;
+  const userId = req.user._id || req.user.id;
+  if (!attendees) {
+    return res.status(400).json({ error: "Attendees missing!" });
+  }
+  if (
+    !amount ||
+    !eventId ||
+    !Array.isArray(attendees) ||
+    attendees.length === 0
+  ) {
+    res.status(400);
+    throw new Error("Invalid booking data");
+  } 
 
-    if (!eventId || !ticketCount || !totalAmount) {
-        res.status(400);
-        throw new Error('Missing required booking details.');
-    }
+  // Create a Razorpay order
+  const order = await paymentService.createPaymentOrder(
+    amount,
+    `receipt_${userId}}`
+  );
+  const newBooking = await Booking.create({
+    user: userId,
+    event: eventId,
+    tickets: attendees,
+    totalAmount:amount,
+    paymentStatus: "pending",
+    razorpayOrderId: order.id,
+  });
 
-    const result = await bookingService.initiatePaymentOrder(
-        userId, eventId, ticketCount, totalAmount
-    );
-
-    res.status(200).json({
-        message: 'Razorpay order created successfully.',
-        orderId: result.orderId,
-        preliminaryBookingId: result.preliminaryBookingId,
-        amount: totalAmount
-    });
+  res.status(201).json({
+    success: true,
+    orderId: order.id,
+    amount: order.amount,
+    currency: order.currency,
+    bookingId: newBooking._id,
+    key: process.env.RAZORPAY_KEY_ID,
+  });
 });
 
-// --- 2. Handle Webhook ---
-// @desc    Handle Razorpay Webhook notification (Payment Success/Failure)
-// @route   POST /api/v1/bookings/razorpay-webhook
-// @access  Public
-export const handleWebhook = asyncHandler(async (req, res) => {
-    // Logic handles signature verification and DB updates
-    const { payload } = req.body;
-    const orderId = payload.payment.entity.order_id;
-    const paymentId = payload.payment.entity.id;
-    const signature = req.headers['x-razorpay-signature'];
+// --- 2. Verify Payment & Generate QR Code ---
+// @route POST /api/v1/bookings/verify-payment
+// @access Protected
+export const verifyPayment = asyncHandler(async (req, res) => {
+  const {
+    razorpay_order_id,
+    razorpay_payment_id,
+    razorpay_signature,
+    bookingId
+  } = req.body;
 
-    try {
-        await bookingService.handlePaymentSuccess(orderId, paymentId, signature);
-        // Must return 200 OK for Razorpay
-        res.status(200).send('Webhook processed successfully.');
-    } catch (error) {
-        console.error('Razorpay Webhook Error:', error.message);
-        res.status(200).send(`Error processing webhook: ${error.message}`);
-    }
-});
+  const isValid = paymentService.verifyPaymentSignature(
+    razorpay_order_id,
+    razorpay_payment_id,
+    razorpay_signature
+  );
 
-// --- 3. Get User Bookings ---
-// @desc    Get booking history for the logged-in user
-// @route   GET /api/v1/bookings/my-tickets
-// @access  Protected
-export const getMyBookings = asyncHandler(async (req, res) => {
-    const bookings = await bookingService.fetchUserBookings(req.user._id);
-    res.status(200).json(bookings);
-});
+  if (!isValid) {
+    res.status(400);
+    throw new Error("Invalid payment signature");
+  }
 
+  // Payment verified ✅ -> Update booking + generate QR
+  const booking = await Booking.findById(bookingId);
+  if (!booking) {
+    res.status(404);
+    throw new Error("Booking not found");
+  }
 
-// --- 4. Ticket Verification (Used by server.js route) ---
-// @desc    Ticket verification endpoint
-// @route   GET /verification/bookId/:qrCodeKey
-// @access  Public
-export const verifyTicket = asyncHandler(async (req, res) => {
-    const { qrCodeKey } = req.params;
-    const result = await bookingService.validateTicket(qrCodeKey);
+  booking.paymentStatus = "paid";
+  booking.razorpayPaymentId = razorpay_payment_id;
 
-    if (result.valid) {
-        res.status(200).json({ status: 'success', message: result.message, event: result.booking.title });
-    } else {
-        res.status(401).json({ status: 'failure', message: result.message });
-    }
-});
+  // Generate QR code for this booking
+  if(!booking._id){
+    console.log("The bookingId is not available");
+    res.status(500);
+    throw new Error("Booking ID not found for QR generation");
+  }
+  const { qrCodeUrl, qrCodeKey } = await bookingService.generateQrForBooking(
+    booking._id
+  );
+  console.log("The qrCodeUrl", qrCodeUrl);
+  console.log("The qrCodeKey", qrCodeKey);
+  booking.qrCodeUrl = qrCodeUrl;
+  booking.qrCodeKey = qrCodeKey;
+  await booking.save();
 
-
-// --- 5. Get QR Code URL (The function you provided) ---
-// @desc    Get the QR Code URL for a specific booking
-// @route   GET /api/v1/bookings/qr/:bookingId
-// @access  Protected (User can only see their own QR code)
-export const getQrCode = asyncHandler(async (req, res) => {
-    const { bookingId } = req.params;
-    // req.user._id is populated by the 'protect' middleware applied to this route
-    const userId = req.user._id;
-
-    const booking = await Booking.findById(bookingId).select('user razorpayStatus qrCodeKey');
-
-    if (!booking) {
-        res.status(404);
-        throw new Error('Booking not found.');
-    }
-
-    // Security check: Ensure the user owns this booking
-    if (booking.user.toString() !== userId.toString()) {
-        res.status(403);
-        throw new Error('Not authorized to view this ticket.');
-    }
-
-    if (booking.razorpayStatus !== 'success') {
-        res.status(400);
-        throw new Error('Payment not finalized for this booking.');
-    }
-
-    // Use the service to generate the external image URL
-    const qrCodeImageURL = generateQrCodeUrl(booking.qrCodeKey);
-
-    res.status(200).json({
-        message: 'QR Code URL generated successfully.',
-        qrCodeUrl: qrCodeImageURL,
-        qrCodeKey: booking.qrCodeKey
-    });
+  res.status(200).json({
+    success: true,
+    message: "Payment verified and ticket booked successfully.",
+    bookingId: booking._id,
+    qrCodeUrl,
+    qrCodeKey,
+  });
 });
