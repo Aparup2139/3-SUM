@@ -13,7 +13,7 @@ export const createOrder = asyncHandler(async (req, res) => {
   if (!amount || !eventId || !Array.isArray(attendes) || attendes.length === 0) {
     res.status(400);
     throw new Error("Invalid booking data");
-  }
+  } 
 
   // Create a Razorpay order
   const order = await paymentService.createPaymentOrder(totalAmount, `receipt_${userId}_${Date.now()}`);
@@ -42,7 +42,7 @@ export const createOrder = asyncHandler(async (req, res) => {
 // @route POST /api/v1/bookings/verify-payment
 // @access Protected
 export const verifyPayment = asyncHandler(async (req, res) => {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature,eventId,attendes,ticketCount} = req.body;
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature,bookingId} = req.body;
 
   const isValid = paymentService.verifyPaymentSignature(
     razorpay_order_id,
