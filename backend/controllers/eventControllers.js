@@ -113,9 +113,7 @@ const getUserEvents = asyncHandler(async (req, res) => {
 
     const userEvents = await Booking.find({
         user: userId,
-
-    }) // Sort by most recent past event
-
+    }).populate("event");
     res.status(200).json({ userEvents, msg: "all events fetched successfully" });
 });
 
