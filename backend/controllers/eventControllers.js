@@ -1,3 +1,4 @@
+import Booking from "../models/Booking.js";
 import Event from "../models/Event.js";
 import asyncHandler from 'express-async-handler'; // Recommended for handling async errors
 
@@ -6,15 +7,15 @@ const getAllEvents = asyncHandler(async (req, res) => {
     const { city, category, userQuery: titleQuery } = req.query;
     let filter = {};
     if (city) {
-        filter.city = { $regex: city, $options: 'i' }; 
+        filter.city = { $regex: city, $options: 'i' };
     }
     if (category) {
         filter.category = { $regex: category, $options: 'i' };
     }
     if (titleQuery) {
-        filter.title = { $regex: titleQuery, $options: 'i' }; 
+        filter.title = { $regex: titleQuery, $options: 'i' };
     }
-    
+
     const events = await Event.find(filter)
 
     if (events.length === 0) {
@@ -33,7 +34,7 @@ const createEvent = asyncHandler(async (req, res) => {
     // Note: You must ensure req.user is available via 'protect' middleware
     const organizer = req.user._id || req.user.id;
     const { title, description, date, venue, city, category, totalTickets, basePrice, priceMin, priceMax } = req.body;
-    
+
     // Basic validation
     if (!title || !description || !organizer || !date || !totalTickets || !basePrice || !priceMin || !priceMax) {
         res.status(400);
@@ -55,7 +56,7 @@ const createEvent = asyncHandler(async (req, res) => {
         currentPrice: basePrice, // Initialize current price to base price
         isPublished: false // Default to false until organizer manually publishes
     });
-    
+
     await newEvent.save();
     res.status(201).json({ newEvent, msg: "Event created successfully" });
 });
@@ -66,7 +67,7 @@ const updateEvent = asyncHandler(async (req, res) => {
     const updates = req.body;
 
     const updatedEvent = await Event.findByIdAndUpdate(eventId, updates, { new: true, runValidators: true });
-    
+
     if (!updatedEvent) {
         res.status(404);
         throw new Error("Event not found");
@@ -79,7 +80,7 @@ const deleteEvent = asyncHandler(async (req, res) => {
     const eventId = req.params.id;
 
     const deletedEvent = await Event.findByIdAndDelete(eventId);
-    
+
     if (!deletedEvent) {
         res.status(404);
         throw new Error("Event not found");
@@ -90,30 +91,32 @@ const deleteEvent = asyncHandler(async (req, res) => {
 // --- 5. GET Event Details by ID (Logic restored from previous prompt) ---
 const getEventDetailsById = asyncHandler(async (req, res) => {
     const eventId = req.params.id;
+    console.log("eventId:", eventId);
     const event = await Event.findById(eventId);
 
     if (!event) {
         res.status(404);
         throw new Error("Event not found");
-    } 
+    }
     res.status(200).json(event);
 });
 
 // --- 6. GET Past Events by User ID (Logic restored from previous prompt) ---
-const getUserpastevents = asyncHandler(async (req, res) => {
-    const userId = req.params.userId;
+const getUserEvents = asyncHandler(async (req, res) => {
+    const userId = req.user._id || req.user.id;
     if (!userId) {
         res.status(400);
         throw new Error("User ID is required");
     }
 
-    const currentDate = new Date();
-    const pastEvents = await Event.find({
-        organizer: userId,
-        date: { $lt: currentDate }
-    }).sort({ date: -1 }); // Sort by most recent past event
+    console.log("userId:", userId);
 
-    res.status(200).json({ pastEvents, msg: "Past events fetched successfully" });
+    const userEvents = await Booking.find({
+        user: userId,
+
+    }) // Sort by most recent past event
+
+    res.status(200).json({ userEvents, msg: "all events fetched successfully" });
 });
 
 // --- 7. GET Upcoming Events by User ID (Logic restored from previous prompt) ---
@@ -148,13 +151,13 @@ const geteventhostedbyuser = asyncHandler(async (req, res) => {
 
 
 // --- Final Export ---
-export { 
-    getAllEvents, 
-    createEvent, 
-    updateEvent, 
-    deleteEvent, 
-    getEventDetailsById, 
-    getUserpastevents, 
-    getUserupcomingevents, 
-    geteventhostedbyuser 
+export {
+    getAllEvents,
+    createEvent,
+    updateEvent,
+    deleteEvent,
+    getEventDetailsById,
+    getUserEvents,
+    getUserupcomingevents,
+    geteventhostedbyuser
 };

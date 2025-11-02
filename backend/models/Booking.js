@@ -75,3 +75,4 @@ BookingSchema.path('tickets').validate(function(value) {
 
 
 export default mongoose.model('Booking', BookingSchema);
+
