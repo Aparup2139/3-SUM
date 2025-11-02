@@ -6,7 +6,7 @@ import EventCard from "../tasksPageUI/eventCard";
 import BookedTicketCard from "./bookingsCard";
 import { useQuery } from "@tanstack/react-query";
 import type { TaskDataType } from "@/types/types";
-import { fetchEvents } from "@/httpfnc/user";
+import { fetchBookedEvents, fetchEvents } from "@/httpfnc/user";
 import { baseUrl } from "@/constast";
 
 
@@ -29,15 +29,17 @@ export const LeftContent = () => {
   const [activeTab, setActiveTab] = useState<number>(1);
   const { data: sampleEvents, isLoading } = useQuery<TaskDataType[]>({
     queryKey: ["fetchUserEvents"],
-    queryFn: () => fetchEvents(baseUrl + `events/user`),
+    queryFn: () => fetchBookedEvents(baseUrl + `events/user`),
 
   })
 
   const now = new Date();
 
+  console.log("samplee evnets", sampleEvents)
   const upcomingEvents = sampleEvents
     ? sampleEvents.filter(event => new Date(event.start_date) > now)
     : [];
+
 
   const ongoingEvents = sampleEvents
     ? sampleEvents.filter(
@@ -46,6 +48,8 @@ export const LeftContent = () => {
         new Date(event.end_date) >= now
     )
     : [];
+
+    console.log("upcoing events0 ", upcomingEvents)
 
   const pastEvents = sampleEvents
     ? sampleEvents.filter(event => new Date(event.end_date) < now)

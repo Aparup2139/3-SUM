@@ -10,6 +10,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { baseUrl } from "@/constast";
+import { useNavigate } from "react-router-dom";
 
 interface TicketBookingModalProps {
   isOpen: boolean;
@@ -166,7 +167,7 @@ const TicketBookingModal: React.FC<TicketBookingModalProps> = ({
       throw error;
     }
   };
-
+  const navigate = useNavigate();
   const handlePayment = async (
     bookingId: string,
     amount: number,
@@ -201,14 +202,14 @@ const TicketBookingModal: React.FC<TicketBookingModalProps> = ({
           const result = await verifyResponse.json();
 
           if (result.success) {
-            alert("Payment successful! Your booking is confirmed.");
+            navigate("/payment-success");
             onClose(false);
           } else {
-            alert("Payment verification failed. Please contact support.");
+            navigate("/payment-failure");
           }
         } catch (error) {
+          navigate('/payment-success')
           console.error("Payment verification error:", error);
-          alert("An error occurred. Please contact support.");
         } finally {
           setIsProcessing(false);
         }
