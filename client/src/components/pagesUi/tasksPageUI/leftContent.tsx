@@ -23,12 +23,21 @@ export const LeftContent = ({ admin = false }) => {
 
   console.log("sampleEvents:", sampleEvents);
 
-  const upcomingEvents = sampleEvents ? sampleEvents.filter((event) => event.start_date > now) : []
-  const ongoingEvents = sampleEvents ? sampleEvents.filter(
-    (event) => event.start_date <= now && event.end_date >= now
-  ) : []
-  const pastEvents = sampleEvents ? sampleEvents.filter((event) => event.end_date < now) : []
+   const upcomingEvents = sampleEvents
+    ? sampleEvents.filter(event => new Date(event.start_date) > now)
+    : [];
 
+  const ongoingEvents = sampleEvents
+    ? sampleEvents.filter(
+      event =>
+        new Date(event.start_date) <= now &&
+        new Date(event.end_date) >= now
+    )
+    : [];
+
+  const pastEvents = sampleEvents
+    ? sampleEvents.filter(event => new Date(event.end_date) < now)
+    : [];
 
   console.log("upcomingEvents:", upcomingEvents);
   console.log("ongoingEvents:", ongoingEvents);
@@ -42,7 +51,7 @@ export const LeftContent = ({ admin = false }) => {
   );
 
   const renderEvents = (events: typeof sampleEvents, label: string) => {
-    if(!events) return renderEmptyState(label);
+    if (!events) return renderEmptyState(label);
     if (isLoading)
       return Array.from({ length: 3 }).map((_, i) => (
         <EventCard key={i} loading />

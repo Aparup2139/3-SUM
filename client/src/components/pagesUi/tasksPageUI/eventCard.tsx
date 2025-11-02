@@ -20,11 +20,11 @@ import { useNavigate } from "react-router-dom";
 import { useOpenTaskUpdate } from "@/store/updateTaskSheet";
 import { useState } from "react";
 import TicketBookingModal from "@/components/ticketBookingModal";
-import { v4 as uuidv4 } from 'uuid';
+
 
 interface EventCardProps {
   admin?: boolean;
-  id?: string;
+  _id?: string;
   title?: string;
   short_description?: string;
   long_description?: string;
@@ -32,7 +32,7 @@ interface EventCardProps {
   start_date?: Date;
   end_date?: Date;
   location?: string;
-  category?: string[];
+  category?: string;
   totalTickets?: number;
   ticketsSold?: number;
   basePrice?: number;
@@ -45,26 +45,31 @@ interface EventCardProps {
 
 export default function EventCard({
   admin = false,
-  id = uuidv4(),
+  _id,
   title = "Tech Innovators Summit 2025",
   short_description = "A premier event showcasing future technology trends.",
   start_date = new Date("2025-02-15T09:00:00Z"),
   end_date = new Date("2025-02-17T17:00:00Z"),
   location = "Bangalore International Exhibition Centre, India",
-  category = ["Technology", "Conference"],
+  category,
   totalTickets = 500,
   ticketsSold = 320,
   currentPrice = 2200,
   eventImageUrl,
   loading = false,
 }: EventCardProps) {
-  const formatDate = (date: Date) => {
+
+  const formatDate = (date?: string | Date) => {
+    const d = date instanceof Date ? date : new Date(date);
+    if (!date) return "N/A";
+    if (isNaN(d.getTime())) return "Inval_id date";
     return new Intl.DateTimeFormat("en-US", {
       month: "short",
       day: "numeric",
       year: "numeric",
-    }).format(date);
+    }).format(d);
   };
+
   console.log("admin:", admin);
   console.log("title:", title);
   const navigate = useNavigate();
@@ -74,14 +79,14 @@ export default function EventCard({
     ticketsAvailable > 100
       ? "Available"
       : ticketsAvailable > 0
-      ? "Limited"
-      : "Sold Out";
-  const setTaskId = useOpenTaskUpdate((state) => state.setTaskId);
+        ? "Limited"
+        : "Sold Out";
+  const setTask_id = useOpenTaskUpdate((state) => state.setTaskId);
   const [isBooking, setIsBooking] = useState(false);
 
   if (loading) {
     return (
-      <Card className="overflow-hidden  border-slate-800 bg-slate-900/50 backdrop-blur w-full max-w-3xl">
+      <Card className="overflow-h_idden  border-slate-800 bg-slate-900/50 backdrop-blur w-full max-w-3xl">
         <Skeleton className="h-48 w-full bg-slate-800" />
         <CardHeader className="space-y-3">
           <Skeleton className="h-6 w-3/4 bg-slate-800" />
@@ -106,21 +111,21 @@ export default function EventCard({
     <Card
       onClick={() => {
         if (!admin) {
-          navigate("/home/event/" + id);
+          navigate("/home/event/" + _id);
         }
       }}
       className="overflow-x border-slate-800 bg-slate-900/60 backdrop-blur w-full max-w-3xl shadow-md hover:shadow-lg transition-all duration-300"
     >
       {isBooking && (
         <TicketBookingModal
-          eventId={id as string}
+          eventId={_id as string}
           eventName={title}
           ticketPrice={currentPrice}
           isOpen={isBooking}
           onClose={setIsBooking}
         />
       )}
-      <div className="relative h-48 overflow-hidden">
+      <div className="relative h-48 overflow-h_idden">
         <img
           src={eventImageUrl}
           alt={title}
@@ -128,11 +133,9 @@ export default function EventCard({
         />
 
         <div className="absolute top-3 right-3 flex gap-2">
-          {category.map((cat) => (
-            <Badge key={cat} className="bg-fuchsia-600 text-white border-0">
-              {cat}
-            </Badge>
-          ))}
+          <Badge className="bg-fuchsia-600 text-white border-0">
+            {category}
+          </Badge>
         </div>
       </div>
 
@@ -146,7 +149,7 @@ export default function EventCard({
       </CardHeader>
 
       <CardContent className="space-y-5">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-slate-300 text-sm">
+        <div className="gr_id gr_id-cols-1 md:gr_id-cols-2 gap-3 text-slate-300 text-sm">
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4 text-purple-400" />
             <span>
@@ -182,7 +185,7 @@ export default function EventCard({
             {admin ? (
               <Button
                 onClick={() =>
-                  navigate(`/admin-panel/analytics?id=${id}&title=${encodeURIComponent(title)}`)
+                  navigate(`/admin-panel/analytics?_id=${_id}&title=${encodeURIComponent(title)}`)
                 }
                 variant="outline"
                 className="bg-gradient-to-r from-purple-700 via-pink-700 to-orange-700 text-primary border-background hover:bg-slate-800"
@@ -200,7 +203,7 @@ export default function EventCard({
             {admin ? (
               <Button
                 onClick={() => {
-                  setTaskId(id as string);
+                  setTask_id(_id as string);
                 }}
                 className="bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white border-0 disabled:opacity-50"
               >

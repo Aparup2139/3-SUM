@@ -9,14 +9,19 @@ export const LeftContent = () => {
 
   const { data: event, isLoading } = useQuery<TaskDataType>({
     queryKey: ["fetchEventDetail", id],
-    queryFn: () => fetchEvents(baseUrl + `events/${id}`),
+    queryFn: () => fetchEventsSpecific(baseUrl + `events/${id}`),
     enabled: !!id,
   })
 
 
+  console.log("Event data in left content:", event, isLoading);
+
   return (
     <div className="h-full w-full flex flex-col justify-center items-center">
-      <EventPage loading={isLoading} {...event} />
+
+      {isLoading ?
+        <EventPage loading={isLoading} /> : <EventPage {...event} />
+      }
     </div>
   );
 };
@@ -28,13 +33,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import TicketBookingModal from "@/components/ticketBookingModal";
 import { useQuery } from "@tanstack/react-query";
 import type { TaskDataType } from "@/types/types";
-import { fetchEvents } from "@/httpfnc/user";
+import { fetchEvents, fetchEventsSpecific } from "@/httpfnc/user";
 import { baseUrl } from "@/constast";
 
 
 
 interface EventPageProps {
-  id?: string;
+  _id?: string;
   title?: string;
   short_description?: string;
   long_description?: string;
@@ -42,7 +47,7 @@ interface EventPageProps {
   start_date?: Date;
   end_date?: Date;
   location?: string;
-  category?: string[];
+  category?: string;
   totalTickets?: number;
   ticketsSold?: number;
   currentPrice?: number;
@@ -53,20 +58,22 @@ interface EventPageProps {
 }
 
 export default function EventPage({
-  id ,
+  _id,
   title = "Tech Innovators Summit 2025",
   short_description = "A premier event showcasing future technology trends.",
   long_description = "Join global leaders, engineers, and developers to explore the latest in AI, IoT, and robotics. Includes workshops, networking, and panel discussions.",
   start_date = new Date("2025-02-15T09:00:00Z"),
   end_date = new Date("2025-02-17T17:00:00Z"),
   location = "Bangalore International Exhibition Centre, India",
-  category = ["Technology", "Conference"],
+  category,
   totalTickets = 500,
   ticketsSold = 320,
   currentPrice = 2200,
   loading = false,
   eventImageUrl,
 }: EventPageProps) {
+
+  console.log('title:', title)
   const [isBooking, setIsBooking] = useState(false);
   const copyLnkToClipboard = (url?: string) => {
     try {
@@ -93,12 +100,17 @@ export default function EventPage({
     }
   };
 
-  const formatDate = (date: Date) =>
-    new Intl.DateTimeFormat("en-US", {
+
+  const formatDate = (date?: string | Date) => {
+    const d = date instanceof Date ? date : new Date(date);
+    if (!date) return "N/A";
+    if (isNaN(d.getTime())) return "Inval_id date";
+    return new Intl.DateTimeFormat("en-US", {
       month: "short",
       day: "numeric",
       year: "numeric",
-    }).format(date);
+    }).format(d);
+  };
 
   const ticketsAvailable = totalTickets - ticketsSold;
   const soldPercentage = ((ticketsSold / totalTickets) * 100).toFixed(1);
@@ -125,7 +137,7 @@ export default function EventPage({
     <div className="w-full bg-slate-950 text-slate-100 h-full overflow-y-scroll">
       {isBooking && (
         <TicketBookingModal
-          eventId={id as string}
+          eventId={_id as string}
           eventName={title}
           isOpen={isBooking}
           onClose={setIsBooking}
@@ -141,11 +153,11 @@ export default function EventPage({
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
 
         <div className="absolute top-4 right-4 flex flex-wrap gap-2">
-          {category.map((cat) => (
-            <Badge key={cat} className="bg-fuchsia-600 text-white border-0">
-              {cat}
+          {category && (
+            <Badge key={category} className="bg-fuchsia-600 text-white border-0">
+              {category}
             </Badge>
-          ))}
+          )}
         </div>
       </div>
 

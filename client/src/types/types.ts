@@ -37,7 +37,7 @@ export enum YTUploadStages {
 }
 
 export type AuthDataType = {
-  id: number;
+  _id: string;
   name: string;
   email: string;
   profileImgUrl: string | null;
@@ -74,7 +74,7 @@ export interface TaskDataType {
   start_date: Date;
   end_date: Date;
   location: string;
-  category: string[];
+  category: string;
   totalTickets: number;
   ticketsSold: number;
   basePrice: number;
