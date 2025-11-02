@@ -8,6 +8,7 @@ import authRoutes from "./routes/authRoutes.js"; // Updated path to src/routes
 import eventRoutes from "./routes/eventRoutes.js"; // Include core platform routes
 import bookingRoutes from "./routes/bookingRoutes.js"; // Include core platform routes
 import llmRoutes from "./routes/llmRoutes.js"; // Updated path to src/routes
+import cookieParser from "cookie-parser";
 
 // Dependencies for Passport strategy initialization and LLM config
 import "./config/passport.js"; 
@@ -53,6 +54,7 @@ app.options(/.*/, cors(corsOptions)); // ✅ Use RegExp instead of "*"
 // ✅ Express + Passport setup
 // -----------------------------
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   session({

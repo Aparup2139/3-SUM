@@ -10,8 +10,7 @@
 //         </div>
 //     </div>
 // }
-
-
+import { v4 as uuidv4 } from 'uuid';
 
 import { useUserStore } from "@/store/user.store"
 
@@ -186,7 +185,7 @@ const sampleEvents = [
         currentPrice: 800,
     },
     {
-        id: "67254c0a8d5f1b1000000010",
+        id: uuidv4(),
         title: "AI & Robotics World Forum",
         short_description: "Discussing AI ethics and automation’s future.",
         long_description:

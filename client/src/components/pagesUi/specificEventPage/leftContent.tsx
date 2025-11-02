@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 
+
 export const LeftContent = () => {
   const { eventId: id } = useParams();
 
@@ -30,6 +31,8 @@ import type { TaskDataType } from "@/types/types";
 import { fetchEvents } from "@/httpfnc/user";
 import { baseUrl } from "@/constast";
 
+
+
 interface EventPageProps {
   id?: string;
   title?: string;
@@ -50,6 +53,7 @@ interface EventPageProps {
 }
 
 export default function EventPage({
+  id ,
   title = "Tech Innovators Summit 2025",
   short_description = "A premier event showcasing future technology trends.",
   long_description = "Join global leaders, engineers, and developers to explore the latest in AI, IoT, and robotics. Includes workshops, networking, and panel discussions.",
@@ -121,6 +125,8 @@ export default function EventPage({
     <div className="w-full bg-slate-950 text-slate-100 h-full overflow-y-scroll">
       {isBooking && (
         <TicketBookingModal
+          eventId={id as string}
+          eventName={title}
           isOpen={isBooking}
           onClose={setIsBooking}
           ticketPrice={currentPrice}

@@ -3,6 +3,7 @@ import Booking from '../models/Booking.js';
 import Event from '../models/Event.js';
 import razorpayInstance from '../config/razorpay.js';
 import crypto from 'crypto';
+import { generateQrCodeUrl } from './qrService.js';
 
 // --- Ticket Validation Logic ---
 export const validateTicket = async (qrCodeKey) => {
@@ -99,4 +100,22 @@ export const handlePaymentSuccess = async (razorpay_order_id, razorpay_payment_i
     // to send the QR code ticket URL to the user.
 
     return booking;
+};
+
+export const generateQrForBooking = async (bookingId) => {
+    console.log("The booking id is", bookingId);
+    const booking = await Booking.findById(bookingId);
+    if (!booking) throw new Error("Booking not found");
+
+    // Generate unique QR key
+    const qrCodeKey = crypto.randomBytes(16).toString("hex");
+
+    // Generate QR code URL
+    const qrCodeUrl = generateQrCodeUrl(qrCodeKey);
+
+    booking.qrCodeKey = qrCodeKey;
+    booking.qrCodeUrl = qrCodeUrl;
+    await booking.save();
+
+    return { qrCodeUrl, qrCodeKey };
 };

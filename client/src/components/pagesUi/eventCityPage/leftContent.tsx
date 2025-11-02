@@ -5,6 +5,7 @@ import { BrushCleaning } from "lucide-react"
 import EventCard from "../tasksPageUI/eventCard"
 import { useParams } from "react-router-dom"
 
+
 const sampleEvents = [
     {
         id: "67254c0a8d5f1b1000000001",
@@ -178,7 +179,7 @@ const sampleEvents = [
         currentPrice: 800,
     },
     {
-        id: "67254c0a8d5f1b1000000010",
+        id: uuidv4(),
         title: "AI & Robotics World Forum",
         short_description: "Discussing AI ethics and automation’s future.",
         long_description:
@@ -318,6 +319,7 @@ import type { TaskDataType } from "@/types/types"
 import { useQuery } from "@tanstack/react-query"
 import { baseUrl } from "@/constast"
 import { fetchEvents } from "@/httpfnc/user"
+
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const cityMeta = [

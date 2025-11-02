@@ -8,6 +8,7 @@ import { TrendingEventCard } from "../profilepageUI/trendingEventCard";
 
 
 
+
 const sampleEvents = [
     {
         id: "67254c0a8d5f1b1000000001",
@@ -171,24 +172,7 @@ const sampleEvents = [
         priceMax: 1000,
         currentPrice: 800,
     },
-    {
-        id: "67254c0a8d5f1b1000000010",
-        title: "AI & Robotics World Forum",
-        short_description: "Discussing AI ethics and automation’s future.",
-        long_description:
-            "Industry experts explore machine learning, robotics, and automation trends with live demos and research showcases.",
-        organizer: "67254c0a8d5f1b1234567899",
-        start_date: new Date("2025-12-10T09:00:00Z"),
-        end_date: new Date("2025-12-12T18:00:00Z"),
-        location: "NIMHANS Convention Centre, Bangalore",
-        category: ["AI", "Robotics", "Technology"],
-        totalTickets: 700,
-        ticketsSold: 480,
-        basePrice: 2500,
-        priceMin: 2000,
-        priceMax: 4000,
-        currentPrice: 3100,
-    },
+
 ];
 
 

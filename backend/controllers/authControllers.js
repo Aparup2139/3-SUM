@@ -5,7 +5,7 @@ import User from "../models/User.js";
 
 // Generate JWT token
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+  return jwt.sign({ id }, process.env.SECRETKEY, {
     expiresIn: "30h", // token expires in 30 hours
   });
 };
@@ -122,7 +122,7 @@ const profile= async (req,res)=>{
     return res.status(500).json({ msg: "Logout failed", error: err.message });
 }
   }
-  
+
 const deleteUser= async (req,res)=>{
   try {
     const id=req.user._id||req.user.id; 
