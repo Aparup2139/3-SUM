@@ -15,6 +15,7 @@ import { AdminPanelPage } from "./components/pagesUi/AdminPanel/adminPanel";
 import { AnalyticsPage } from "./components/pagesUi/AdminPanel/analytics";
 import PaymentSuccess from "./components/pagesUi/paymentStatus/paymentSuccess";
 import PaymentFailure from "./components/pagesUi/paymentStatus/paymentFailure";
+import VerifyQr from "./components/verifyQr";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -91,6 +92,10 @@ const router = createBrowserRouter([
   {
     path: "/payment-failure",
     element: <PaymentFailure />,
+  },
+  {
+    path: "/verification/:bookingId",
+    element: <VerifyQr />,
   },
 ]);
 
