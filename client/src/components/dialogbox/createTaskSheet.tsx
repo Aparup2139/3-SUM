@@ -47,6 +47,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { baseUrl } from "@/constast";
 
 type EventPayload = {
   bannerImg: string;
@@ -126,6 +127,7 @@ export default function AddEventForm({ initial = {}, onCreate }: Props) {
         basePrice: Number(form.basePrice),
         priceMin: Number(form.priceMin),
         priceMax: Number(form.priceMax),
+        category: form.category[0]
       };
 
       if (onCreate) onCreate(payload);
@@ -145,6 +147,20 @@ export default function AddEventForm({ initial = {}, onCreate }: Props) {
         priceMin: 0,
         priceMax: 0,
       });
+
+
+
+      // call this route here baseUrl + /event/create with payload
+      const response = await fetch(baseUrl + "events/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+      console.log("create response:", result);
       setErrors({});
     } finally {
       setSubmitting(false);

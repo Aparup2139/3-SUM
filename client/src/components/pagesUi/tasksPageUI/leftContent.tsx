@@ -5,7 +5,7 @@ import { BrushCleaning } from "lucide-react";
 import EventCard from "./eventCard";
 import { useQuery } from "@tanstack/react-query";
 import type { TaskDataType } from "@/types/types";
-import { fetchEvents } from "@/httpfnc/user";
+import { fetchEvents, fetchEventsOfOrganizer } from "@/httpfnc/user";
 import { baseUrl } from "@/constast";
 
 
@@ -15,8 +15,7 @@ export const LeftContent = ({ admin = false }) => {
 
   const { data: sampleEvents, isLoading } = useQuery<TaskDataType[]>({
     queryKey: admin ? ["fetchOrganizerEvents"] : ["fetchAllEvents"],
-    queryFn: () => fetchEvents(admin ? baseUrl + `events/organizer` : baseUrl + `events`),
-
+    queryFn: () => admin ? fetchEventsOfOrganizer(baseUrl + `events/organizer`) : fetchEvents(baseUrl + `events`),
   })
 
   const now = new Date();

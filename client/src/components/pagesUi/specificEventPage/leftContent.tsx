@@ -28,13 +28,14 @@ export const LeftContent = () => {
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, Users, Clock } from "lucide-react";
+import { Calendar, MapPin, Users, Clock, Star, Sparkles } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import TicketBookingModal from "@/components/ticketBookingModal";
 import { useQuery } from "@tanstack/react-query";
 import type { TaskDataType } from "@/types/types";
-import { fetchEvents, fetchEventsSpecific } from "@/httpfnc/user";
+import { fetchEvents, fetchEventsSpecific, fetchReviewsOfEvent } from "@/httpfnc/user";
 import { baseUrl } from "@/constast";
+import { callGemini } from "@/httpfnc/gemini";
 
 
 
@@ -73,7 +74,35 @@ export default function EventPage({
   eventImageUrl,
 }: EventPageProps) {
 
+  const handleAISummary = async () => {
+    try {
+      setAiLoading(true);
+
+      const allReviews = ReviewData.map((rev: any) => rev.comment).join("\n");
+      const summary = await callGemini(
+        `Summarize the following event reviews into a short paragraph highlighting overall sentiment, strengths, and weaknesses:\n${allReviews}`
+      );
+      if (summary)
+        setAiSummary(summary);
+    } catch (error) {
+      console.error("AI Summary Error:", error);
+      setAiSummary("Failed to generate AI summary.");
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiSummary, setAiSummary] = useState<string | null>(null);
   console.log('title:', title)
+  const { data: ReviewData, isLoading } = useQuery({
+    queryKey: ["getReveiewsOfEvents", _id],
+    queryFn: () => fetchReviewsOfEvent(baseUrl + `reviews/event/${_id}`),
+    enabled: !!_id
+  })
+
+  console.log("review Data:", ReviewData)
+
   const [isBooking, setIsBooking] = useState(false);
   const copyLnkToClipboard = (url?: string) => {
     try {
@@ -228,6 +257,85 @@ export default function EventPage({
           </div>
         </div>
       </div>
+
+
+
+      {isLoading ? (
+        // 🔄 Skeleton while fetching review data
+        <div className="max-w-5xl mx-auto px-6 pb-10 space-y-4">
+          <h2 className="text-xl font-semibold text-white">Reviews</h2>
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="p-4 bg-slate-900/50 rounded-lg border border-slate-800 space-y-3">
+              <Skeleton className="h-4 w-3/4 bg-slate-800" />
+              <Skeleton className="h-4 w-1/2 bg-slate-800" />
+            </div>
+          ))}
+        </div>
+      ) : ReviewData && ReviewData.length > 0 && (
+        <div className="max-w-5xl mx-auto px-6 pb-10 space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-white">Reviews</h2>
+
+            {/* ⚡ Sexy AI Button */}
+            <Button
+              onClick={handleAISummary}
+              disabled={aiLoading}
+              className={`flex items-center gap-2 transition-all duration-300 ${aiLoading
+                ? "bg-slate-700 text-slate-400 cursor-not-allowed"
+                : "bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white hover:shadow-[0_0_15px_rgba(217,70,239,0.6)]"
+                }`}
+            >
+              <Sparkles className="h-4 w-4" />
+              {aiLoading ? "Summarizing..." : "Get AI Review Summary"}
+            </Button>
+          </div>
+
+          {/* AI Response Output */}
+          {aiLoading && (
+            <div className="space-y-2 bg-slate-900/40 p-4 rounded-lg border border-slate-800">
+              <Skeleton className="h-4 w-5/6 bg-slate-800" />
+              <Skeleton className="h-4 w-4/6 bg-slate-800" />
+              <Skeleton className="h-4 w-3/6 bg-slate-800" />
+            </div>
+          )}
+          {!isLoading && aiSummary && (
+            <div className="p-4 bg-slate-900/40 rounded-lg border border-slate-800 animate-fadeIn">
+              <h3 className="font-semibold text-fuchsia-400 mb-2">AI Summary:</h3>
+              <p className="text-slate-300 whitespace-pre-line">{aiSummary}</p>
+            </div>
+          )}
+
+          {/* Reviews */}
+          <div className="space-y-4">
+            {ReviewData.map((review: any) => (
+              <div
+                key={review._id}
+                className="p-4 bg-slate-900/50 rounded-lg border border-slate-800"
+              >
+                <p className="text-slate-300">{review.comment}</p>
+                <div className="mt-3 flex items-center justify-between text-sm text-slate-500">
+                  <div className="flex items-center space-x-1">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`h-4 w-4 ${i < review.rating
+                          ? "fill-yellow-400 text-yellow-400"
+                          : "text-slate-600"
+                          }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="italic text-slate-400">
+                    — {review.user?.fullName || "Anonymous"}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+
     </div>
   );
 }

@@ -83,6 +83,9 @@ export interface TaskDataType {
   currentPrice: number;
   title: string;
   eventImageUrl : string;
+  city?: string,
+  venue?: string,
+  description?:string
 }
 
 export interface userSearchType {
