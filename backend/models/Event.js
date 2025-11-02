@@ -27,13 +27,10 @@ const EventSchema = new mongoose.Schema({
     },
     city: {
         type: String,
-        // Added index for efficient filtering by city
-        index: true 
+        index: true
     },
     category: {
-        type: String, // e.g., 'Tech', 'Music', 'Arts'
-        // Added index for efficient filtering by category
-        index: true 
+        type: String,
     },
     totalTickets: {
         type: Number,
@@ -62,12 +59,12 @@ const EventSchema = new mongoose.Schema({
         required: true
     },
     // CRUCIAL: Only show published events publicly
-    isPublished: { 
+    isPublished: {
         type: Boolean,
         default: true,
         index: true
     },
-    
+
     createdAt: {
         type: Date,
         default: Date.now

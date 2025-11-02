@@ -5,7 +5,7 @@ import User from "../models/User.js";
 
 // Generate JWT token
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.SECRETKEY, {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: "30h", // token expires in 30 hours
   });
 };
@@ -103,10 +103,11 @@ const profile= async (req,res)=>{
       if (!user) {
           return res.status(404).json({ message: "User not found" });
       }
-      res.status(200).json({user,msg:"User profile fetched successfully"});
+      console.log("Fetched user profile:", user);
+      return res.status(200).json({user,msg:"User profile fetched successfully"});
   } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "Server error" });
+      return res.status(500).json({ message: "Server error" });
   } 
 };
 
